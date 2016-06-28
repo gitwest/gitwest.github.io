@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>拖拽及拖拽封装</title>
+<style>
+body,div,span,input，p,ul,li,img{
+	margin:0;
+	padding:0;
+	}
+#box{
+	width:200px;
+	height:200px;
+	background:#999;
+	position:absolute;
+	top:100px;
+	left:300px;
+	}
+/*	  		    w : 西
+                e : 东
+                n : 北
+                s : 南
+
+                ne : 东北
+                se : 东南
+                sw : 西南
+                nw : 西北
+               
+           
+            cursor: nw-resize;
+ */
+</style>
+<script>
+window.onload=function(){
+	var oBox=document.getElementById('box');
+	var drag='';
+	oBox.onmousedown=function(ev){
+		var ev=ev||event;
+		var disX=ev.clientX;
+		var disY=ev.clientY;
+		var L=oBox.offsetLeft;
+		var W=oBox.offsetWidth;
+		var T=oBox.offsetTop;
+		var H=oBox.offsetHeight;
+		getDrag(ev);
+		
+		document.onmousemove=function(ev){
+			
+			switch(drag){
+				//上下左右四个方向的拉伸缩放
+				case 'left':
+				oBox.style.width=W-(ev.clientX-disX)+'px';
+				oBox.style.left=L+(ev.clientX-disX)+'px';
+				break;
+				
+				case 'right':
+				oBox.style.width=W+(ev.clientX-disX)+'px';
+				break;
+				
+				case 'top':
+				oBox.style.height=H-(ev.clientY-disY)+'px';
+				oBox.style.top=T+(ev.clientY-disY)+'px';
+				break;
+				
+				case 'bottom':
+				oBox.style.height=H+(ev.clientY-disY)+'px';
+				break;
+				//对角四个方向的拉伸缩放
+				//右下角
+				case 'se':
+				oBox.style.height=H+(ev.clientY-disY)+'px';
+				oBox.style.width=W+(ev.clientX-disX)+'px';
+				break;
+				//右上角
+				case 'ne':
+				oBox.style.width=W+(ev.clientX-disX)+'px';
+				oBox.style.height=H-(ev.clientY-disY)+'px';
+				oBox.style.top=T+(ev.clientY-disY)+'px';
+				break;
+				//左下角
+				case 'sw':
+				oBox.style.width=W-(ev.clientX-disX)+'px';
+				oBox.style.left=L+(ev.clientX-disX)+'px';
+				oBox.style.height=H+(ev.clientY-disY)+'px';
+				break;
+				//左上角
+				case 'nw':
+				oBox.style.width=W-(ev.clientX-disX)+'px';
+				oBox.style.left=L+(ev.clientX-disX)+'px';
+				oBox.style.height=H-(ev.clientY-disY)+'px';
+				oBox.style.top=T+(ev.clientY-disY)+'px';
+				break;
+			}
+			
+			
+		}
+		document.onmouseup=function(){
+			document.onmousemove=null;	
+		}
+		return false;
+	}
+	//移动时方向箭头的变化与消失
+	oBox.onmousemove=function(ev){
+		var ev=ev||event;
+		oBox.style.cursor='';
+		getDrag(ev);
+	}
+	
+	//封装方向条件判断函数
+	function getDrag(ev){
+		var ev=ev||event;
+		var disL=oBox.offsetLeft+10;
+		var disR=oBox.offsetWidth+oBox.offsetLeft-10;
+		var disT=oBox.offsetTop+10;
+		var disB=oBox.offsetTop+oBox.offsetHeight-10;
+			//判断上下左右四个方向
+			//左
+			if(ev.clientX<disL){
+				drag='left';	
+				oBox.style.cursor='w-resize';	
+			}
+			//右
+			if(ev.clientX>disR){
+				drag='right';
+				oBox.style.cursor='e-resize';		
+			}
+			//上
+			if(ev.clientY<disT){
+				drag='top';	
+				oBox.style.cursor='n-resize';	
+			}
+			//下
+			if(ev.clientY>disB){
+				drag='bottom';
+				oBox.style.cursor='s-resize';		
+			}
+			//对角四个方向的判断
+			//右下角
+			if(ev.clientX>disR&&ev.clientY>disB){
+				drag='se';	
+				oBox.style.cursor='se-resize';
+			}
+			//右上角
+			if(ev.clientX>disR&&ev.clientY<disT){
+				drag='ne';	
+				oBox.style.cursor='ne-resize';
+			}
+			//左下角
+			if(ev.clientX<disL&&ev.clientY>disB){
+				drag='sw';
+				oBox.style.cursor='sw-resize';	
+			}
+			//左上角
+			if(ev.clientX<disL&&ev.clientY<disT){
+				drag='nw';
+				oBox.style.cursor='nw-resize';	
+			}
+	}
+}
+</script>
+</head>
+<body>
+	<div id="box"></div>	
+</body>
+</html>

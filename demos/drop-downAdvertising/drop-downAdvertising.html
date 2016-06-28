@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>定时器_下拉广告</title>
+<style>
+body,div{
+	margin:0;
+	padding:0;
+	}
+#box1{
+	width:900px;
+	margin: 0 auto;
+	background:url(imgs/img.jpg) no-repeat;
+	}
+</style>
+<script>
+window.onload=function(){
+	//获取元素
+	var oBox=document.getElementById('box1');
+	//获取box1的默认高度
+	var h=parseInt(getComputedStyle(oBox).height);
+	var time=null;
+	var time2=null;
+	var time3=null;
+	//添加定时器，让box1有一个下拉的过程
+	time=setInterval(function(){
+		 h+=9;
+		 if(h>=300){
+			//h>=300时清除定时器，不再让它执行
+			clearInterval(time);
+			h=300; 
+			//下拉到300px时，让box1停留2秒
+			time2=setTimeout(function(){
+				//在延时定时器中，加入一个定时器，延时2秒后执行
+				time3=setInterval(function(){
+					h-=6;
+					if(h<=100){	
+					//清除该定时器
+					clearInterval(time3);
+					h=100;	
+					}
+					oBox.style.height=h+'px';
+				},100);
+				
+			},2000);
+		 }
+		 oBox.style.height=h+'px';				
+	},100);
+}
+</script>
+</head>
+<body>
+	<div id="box1"></div>
+</body>
+</html>

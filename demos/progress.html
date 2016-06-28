@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+<style>
+body,div,span,input，p,ul,li,img{
+	margin:0;
+	padding:0;
+	}
+
+#wrap{
+	width:500px;
+	height:30px;
+	border:1px solid #000;
+	margin:50px auto;
+	position:relative;
+	background: #fff;
+}
+#wrap1{
+	height:30px;
+	width:100%;
+	background: blue;
+	position: absolute;
+	top:0;
+	left:0;
+	z-index: 2;
+	clip:rect(0px,0px,30px,0px);
+	font:bold 18px/30px "微软雅黑";
+	text-align: center;
+}
+#wrap2{
+	height:30px;
+	width:100%;
+	position: absolute;
+	top:0;
+	left:0;
+	z-index: 1;
+	font:bold 18px/30px "微软雅黑";
+	text-align: center;
+}
+</style>
+
+<script>
+
+window.onload=function () {
+	var wrap=document.getElementById('wrap');
+	var wrap1=document.getElementById('wrap1');
+	var wrap2=document.getElementById('wrap2');
+	var timer=null;
+	var iNow=0;
+	var getWrapWidth=parseInt(getStyle(wrap,'width'));
+
+	//开定时器，让条件内的progress(iNow)函数每100毫秒执行一次！
+	timer=setInterval(function(){
+		if(iNow==100){
+			clearInterval(timer);
+		}else{
+			iNow++;
+			progress(iNow);
+		}
+	},100);
+
+
+	//进度条函数封装
+	function progress(cent){
+		wrap1.style.clip='rect(0px,'+(cent/100*getWrapWidth)+'px,30px,0px)';
+		wrap1.innerHTML=cent+'%';
+		//加上此处的innerHTML，因为wrap1处的内容开始被隐藏起来了，随着进度条增长它才慢慢显现，所以结构部分wrap2也不能省去！
+		wrap2.innerHTML=cent+'%';
+	}
+	//获取元素封装
+	function getStyle(obj,attr){
+		if(obj.current){
+			return obj.current[attr];
+		}else{
+			return getComputedStyle(obj)[attr];
+		}
+	}
+	//alert(getStyle(wrap,'width'))
+
+}
+</script>
+</head>
+<body>
+	<div id="wrap">
+		<div id="wrap1">0%</div>
+		<div id="wrap2">0%</div>
+	</div>
+</body>
+</html>

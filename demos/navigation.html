@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>top</title>
+<style>
+body,div,ul,li,h3{
+	margin:0;
+	padding:0;
+	}
+#wrap{
+	width:800px;
+	height:2000px;
+	border:1px solid #999;
+	margin:0 auto;
+	text-align:center;
+	}
+
+ul{
+	width:610px;
+	height:50px;
+	margin-top:200px;
+	margin-left:100px;
+	}
+li{
+	width:120px;
+	height:50px;
+	border:1px solid #966;
+	font:bold 20px/50px "微软雅黑";
+	text-align:center;
+	list-style-type:none;
+	float:left;
+	}
+#top{
+	width:80px;
+	height:80px;
+	background:#666666;
+	text-align:center;
+	font:bold 20px/80px "微软雅黑";
+	color:#FFFFFF;
+	position:fixed;
+	right:275px;
+	bottom:0;
+	display:none;
+	cursor:pointer;
+	}	
+</style>
+<script>
+window.onload=function(){
+	var oWrap=document.getElementById('wrap');
+	var oUl=document.getElementById('oul');
+	var oTop=document.getElementById('top');
+	var ulTop=oUl.offsetTop;
+	//console.log(ulTop)
+	window.onscroll=function(){
+		if(window.pageYOffset>=ulTop){
+			oUl.style.position='fixed';
+			oUl.style.top=-ulTop+'px';
+		}else{
+			oUl.style.position='';
+		}
+	//回到顶部的div隐藏、显示判断（当滚动条高度大于等于可视区高度的时候div显示，否则隐藏！）
+		if( window.pageYOffset>=window.innerHeight){
+			oTop.style.display='block';
+		}else{
+			oTop.style.display='none';
+		}
+	}
+	//回到顶部
+	oTop.onclick=function(){
+		window.scrollTo(0,0)	
+	}
+	
+}
+</script>
+</head>
+<body>
+  <div id="wrap">
+  	<ul id="oul">
+    	<li>首页</li>
+        <li>html</li>
+        <li>css</li>
+        <li>javascript</li>
+        <li>jQury</li>
+    </ul>
+  </div>
+  <div id="top">回到顶部</div>
+</body>
+</html>

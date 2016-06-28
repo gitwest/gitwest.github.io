@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>自适应遮罩层及弹出层</title>
+<style>
+body,div,input{
+	margin:0;
+	padding:0;
+	}
+#wrap{
+	display:none;
+	background:rgba(0,0,0,0.5);
+	position:fixed;
+	top:0;
+	left:0;
+	}
+#box{
+	width:300px;
+	height:300px;
+	border:5px solid #ccc;
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	}
+</style>
+<script>
+window.onload=function(){
+	var oWrap=document.getElementById('wrap');
+	var oBox=document.getElementById('box');
+	var oBtn=document.getElementById('btn');
+	var Doc=document.body||document.documentElement;
+	oBtn.onclick=function(){
+		oWrap.style.display='block';
+		oBox.style.display='block';	
+		changebox();
+	}
+	window.onresize=function(){
+		changebox();	
+	}
+	//封装自适应遮罩层及弹出层
+	function changebox(){
+		oWrap.style.width=window.innerWidth+'px';
+		oWrap.style.height=window.innerHeight+'px';	
+		oBox.style.left=(window.innerWidth-oBox.offsetWidth)/2+'px';	
+		oBox.style.top=(window.innerHeight-oBox.offsetHeight)/2+'px';
+	}
+	
+}
+</script>
+</head>
+
+<body>
+    <div id="wrap"></div>
+    <input type="button" value="按钮" id="btn"/>
+    <div id="box">这里是自适应弹出层</div>
+</body>
+</html>

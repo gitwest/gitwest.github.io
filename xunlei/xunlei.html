@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>迅雷官网首页</title>
+<style>
+body,img,div,ul,li,p{
+	margin:0;
+	padding:0;
+	}
+img{
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0;
+	left:0;
+	opacity:0;
+	z-index:0;
+	}
+	
+#box{
+	width:1366px;
+	height:631px;
+	position:relative;
+	overflow:hidden;
+	}
+	
+.opa{
+	opacity:1;
+	}
+#logo{
+	width:1365px;
+	height:80px;
+	background:url(images/n_logo.png) no-repeat 35px 10px;
+	background-size:140px 65px;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:1;
+	color:#fff;
+	}
+#logo p{
+	width:140px;
+	height:44px;
+	font:bold 16px/44px "宋体";
+	text-align:right;
+	}
+#logo p a{
+	text-decoration:none;
+	color:#fff;
+	position:absolute;
+	}	
+#logo .xunlei_center{
+	position:absolute;
+	top:22px;
+	right:175px;
+	}	
+#logo .xunlei_more{
+	position:absolute;
+	top:22px;
+	right:8px;
+	}
+#logo .xunlei_more span{
+	position:absolute;
+	top:8px;
+	left:40px;
+	width:23px;
+	height:23px;
+	background:url(images/head_spr.png) no-repeat left bottom;
+	}
+#logo .xunlei_center span{
+	position:absolute;
+	top:12px;
+	left:20px;
+	width:30px;
+	height:23px;
+	background:url(images/head_spr.png) no-repeat left top;
+	}
+#logo .xunlei_center a{
+	top:0;
+	left:55px;
+	width:70px;
+	height:44px;
+	}	
+#logo .xunlei_more a{
+	top:0;
+	left:40px;
+	width:70px;
+	height:44px;
+	}
+#logo p:hover{
+	border:2px solid #CCC;
+	}			
+#logo ul{
+	float:right;
+	list-style:none;
+	position:absolute;
+	right:-164px;
+	top:0;
+	width:164px;
+	height:550px;
+	background:#666;
+	opacity:0.5;
+	text-align:center;
+	font:bold 16px/55px '宋体';
+	padding-top:80px;
+	display:none;
+	}
+#bg{
+	list-style:none;
+	position:absolute;
+	top:520px;
+	left:540px;
+	}
+#bg li{
+	width:60px;
+	height:70px;
+	float:left;
+	margin-right:30px;
+	}
+#bg .bg_a{
+	background:url(images/ic_spr.png) no-repeat 0 top;
+	} 	
+#bg .bg_b{
+	background:url(images/ic_spr.png) no-repeat -110px top;
+	} 
+#bg .bg_c{
+	background:url(images/ic_spr.png) no-repeat -220px top;
+	} 
+#bg .bg_d{
+	background:url(images/ic_spr.png) no-repeat -405px top;
+	} 
+#txt{
+	color:#fff;
+	}	
+#txt p{
+	font-size:40px;
+	font-family:"微软雅黑";
+	}	
+#txt .txt_a{
+	color:#000;
+	position:absolute;
+	top:70px;
+	left:550px;
+	text-align:center;
+	opacity:0;
+	}
+.txt_b{
+	position:absolute;
+	top:70px;
+	left:650px;
+	text-align:center;
+	width:30px;
+	height:400px;
+	opacity:0;
+	}
+.txt_c{
+	position:absolute;
+	top:70px;
+	left:570px;
+	text-align:center;
+	opacity:0;
+	}
+#txt .txt_c p{
+	display:inline-block;
+	}	
+.txt_d{
+	position:absolute;
+	top:70px;
+	left:500px;
+	text-align:center;
+	opacity:0;
+	}
+.logo_lijs{
+	background:url(images/head_spr.png) no-repeat -30px 13px;
+	}												
+</style>
+<script src="tween.js"></script>
+<script src="mTween.js"></script>
+<script>
+window.onload=function(){
+	//logo部分
+	var aImg=document.getElementsByTagName('img');
+	var oLogo=document.getElementById('logo');
+	var oP=oLogo.getElementsByTagName('p')[1];
+	var oUl=document.getElementById('Ul');
+	var aLis=oUl.getElementsByTagName('li');
+	var addDiv=document.getElementById('addDiv');
+	//给bg txt部分添加关联事件，使用的对象
+	var oUl_obg=document.getElementById('bg');
+	var bgLis=oUl_obg.getElementsByTagName('li');
+	var oTxt=document.getElementById('txt');
+	var aDiv=oTxt.getElementsByTagName('div');
+	
+	//bg中4个要进行替换的背景图片
+	var arrImg=['url(images/ic_spr.png) no-repeat 0 bottom','url(images/ic_spr.png) no-repeat -110px bottom','url(images/ic_spr.png) no-repeat -220px bottom','url(images/ic_spr.png) no-repeat -405px bottom'];
+	var num=0;
+	var tim=null;
+	
+	toChange();
+	clearInterval(tim);
+	//给logo中的p[1](更多)添加鼠标移入事件,侧边栏划出效果
+	oP.onmouseover=oUl.onmouseover=function(){
+		mTween(oUl,'right',0,400,'linear');
+		oUl.style.display='block';	
+	}
+	
+	//给logo中的ul添加鼠标移出事件,侧边栏划入效果
+	oP.onmouseout=oUl.onmouseout=function(){
+		mTween(oUl,'right',-164,400,'linear');		
+	}
+	//当鼠标移入logo中的li时，给li添加背景图片
+	for(var i=0;i<aLis.length;i++){
+		aLis[i].onmouseover=function(){
+			for(var i=0;i<aLis.length;i++){
+				if(aLis[i]!=this){
+				aLis[i].className='';	
+				}	
+			}
+			this.className='logo_lijs';	
+		}
+	}
+	//给bg中4个li添加鼠标移入事件
+	for(var i=0;i<bgLis.length;i++){
+		bgLis[i].index=i;	
+		bgLis[i].onmouseover=function(){
+			clearInterval(tim);
+			for(var i=0;i<bgLis.length;i++){
+				//清除非移入的bgLis及对应的img/div的效果	
+					if(bgLis[i]!=this){
+						bgLis[i].style.background='';
+						mTween(aImg[i], 'opacity',0,600,'linear');
+						mTween(aDiv[i], 'opacity',0,600,'linear');
+						//mTween(aDiv[i], 'top',70,600,'linear');
+					}	
+			}
+					this.style.background=arrImg[this.index];
+					//aImg[this.index].style.opacity=1;
+					mTween(aImg[this.index], 'opacity',1,600,'linear');
+					mTween(aDiv[this.index], 'opacity',1,600,'linear');
+					//mTween(aDiv[this.index], 'top',160,600,'linear');
+	    }	
+		
+		//给bg中4个li添加鼠标移出事件
+		bgLis[i].onmouseout=function(){
+			tim=setInterval(toChange,2000);
+			num=this.index;
+		}
+    }
+	        //开一个定时器，让bg中li的移入事件自动执行
+	    	tim=setInterval(toChange,2000);
+			//封装定时器中执行的函数
+			function toChange(){	
+			    //清除上一个bgLis、aImg、aDiv的样式
+				bgLis[num].style.background='';
+				//aImg[i].style.opacity=0;	
+				mTween(aImg[num], 'opacity',0,600,'linear');
+				mTween(aDiv[num], 'opacity',0,600,'linear');
+				//mTween(aDiv[num], 'top',70,600,'linear');
+			    num++;
+				if(num>=bgLis.length){
+					num=0;	
+				}
+				//当前这个赋予相应的样式
+				bgLis[num].style.background=arrImg[num];
+				//aImg[this.index].style.opacity=1;
+				mTween(aImg[num], 'opacity',1,600,'linear');
+				mTween(aDiv[num], 'opacity',1,600,'linear');
+				//mTween(aDiv[num], 'top',160,600,'linear');
+	   		}
+}
+</script>
+</head>
+<body>
+	<div id="box">
+        <img src="images/a.jpg" class="opa"/>
+        <img src="images/b.jpg" />
+        <img src="images/c.jpg" />
+        <img src="images/d.jpg" />
+        <div id="logo">
+            <p class="xunlei_center"><span></span><a href="##">产品中心</a></p>
+            <div id="addDiv" style="height: 631px; width: 164px; right: 0; position: absolute;">
+            <ul id="Ul">
+                <li>星域CDN</li>
+                <li>新闻动态</li>
+                <li>人力资源</li>
+                <li>投资关系</li>
+                <li>关于迅雷</li>
+                <li>联系我们</li>
+            </ul>
+            </div>
+            <p class="xunlei_more"><span></span><a href="##">更多</a></p>
+        </div>
+        <ul id="bg">
+            <li class="bg_a"></li>
+            <li class="bg_b"></li>
+            <li class="bg_c"></li>
+            <li class="bg_d"></li>
+        </ul>
+        <div id="txt">
+        	<div class="txt_a" >
+            	<p style="color:#000;">炽热追片之心</p>
+                <span>没有wi-fi，也挡不住</span>
+            </div>
+        	<div class="txt_b">
+                <p>极速</p>
+            </div>
+            <div class="txt_c">
+                <p>快，</p>让生活
+                <p>慢</p>下来
+            </div>
+            <div class="txt_d">
+                <p>流畅画质&nbsp;&nbsp;乐无止境</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

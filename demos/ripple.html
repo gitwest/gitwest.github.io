@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>鼠标点击波纹效果</title>
+<style>
+body,div,span,input，p,ul,li,img{
+	margin:0;
+	padding:0;
+	}
+div{
+	width:50px;
+	height:50px;
+	border:2px solid #666;
+	border-radius:50%;
+	position:absolute;
+	top:0;
+	left:0;
+	display:none;
+}
+
+</style>
+<script>
+window.onload=function(){
+	var Div=document.getElementsByTagName('div');
+	
+	document.onclick=function(ev){
+		move(Div[0],ev);
+		//分别延时调用move（）函数
+		setTimeout(function(){
+			move(Div[1],ev);	
+		},100);	
+		setTimeout(function(){
+			move(Div[2],ev);	
+		},200);	
+	}
+	
+	//封装一个函数，将块显示！并开一个定时器，将块逐渐变大，透明度逐渐变小，并确定块的位置！
+	function move(obj,ev){
+	   	
+		var w=0;
+		var h=0;
+		var n=100;
+		
+		var tim=setInterval(function(){
+			if(n<=0){
+				clearInterval(tim);	
+			}
+			obj.style.width=(w+=4)+'px';
+			obj.style.height=(h+=4)+'px';
+			obj.style.opacity=(n-=4)/100;
+			obj.style.left=ev.clientX-obj.offsetWidth/2+'px';
+			obj.style.top=ev.clientY-obj.offsetHeight/2+'px';
+			//将显示为块写在外面的话，会出现bug，因为在等待的这20毫秒时，它会先显示在左上角20毫秒！
+			obj.style.display='block';
+		},20);
+
+	}
+	
+}
+</script>
+</head>
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+</body>
+</html>

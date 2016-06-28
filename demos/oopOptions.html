@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>拖拽及拖拽封装</title>
+<style>
+body,div,span,input，p,ul,li,img{
+	margin:0;
+	padding:0;
+	}
+
+#wrap{
+	width:500px;
+	height:500px;
+	position:relative;
+	}
+#two_wrap{
+	width:500px;
+	height:500px;
+	position:relative;
+	top:-225px;
+	}
+#wrap div,#two_wrap div{
+	width:200px;
+	height:200px;
+	position:absolute;
+	top:40px;
+	left:0;
+	border:1px solid red;
+	display:none;
+	}
+#wrap .bg,#two_wrap .bg {
+	background:#C03;
+	}
+#wrap .blocks,#two_wrap .blocks{
+	display:block;
+	}
+#btns{
+	position:absolute;
+	top:540px;
+	left:0;
+	}
+</style>
+<script>
+/*//JS原生写选项卡
+window.onload=function(){
+	var oWrap=document.getElementById('wrap');
+	var aBtn=oWrap.getElementsByTagName('input');
+	var aDiv=oWrap.getElementsByTagName('div');
+	var timer=null;
+	var n=0;
+	for(var i=0;i<aBtn.length;i++){
+		aBtn[i].index=i;
+		aBtn[i].onclick=function(){
+			for(var i=0;i<aBtn.length;i++){
+				aDiv[i].className=' ';
+				aBtn[i].className=' ';
+			}
+			aDiv[this.index].className='blocks';
+			aBtn[this.index].className='bg';
+		}
+	}
+	//定时器自动执行选项卡
+	timer=setInterval(function(){
+		for(var i=0;i<aBtn.length;i++){
+				aDiv[i].className=' ';
+				aBtn[i].className=' ';
+		}	
+		if(n>=aBtn.length){
+			n=0;	
+		}
+		aDiv[n].className='blocks';
+		aBtn[n].className='bg';
+		n++;
+	},1000);
+}
+*/
+//面向对象选项卡编写
+window.onload=function(){
+	var ka=new Change('wrap');	
+	ka.gos();
+	//ka.setIntervals();
+	//这里通过直接点击事件 调用ka的方法 来控制
+	var oBtn=document.getElementById('btns');
+  	var aInput=oBtn.getElementsByTagName('input');
+	//开启自动选项
+	 aInput[0].onclick=function(){
+		ka.setIntervals();
+	 }
+	 //停止自动选项
+	 aInput[1].onclick=function(){
+		ka.stops();
+	 }
+	 //开启第二个自动
+	 var ka2=new Change('two_wrap');
+	  aInput[2].onclick=function(){
+		ka2.setIntervals();
+	 }
+	 
+	 //停止两个自动
+	 aInput[3].onclick=function(){
+		ka.stops();
+		ka2.stops();
+	 }
+	 //反转
+	 aInput[4].onclick=function(){
+		if(ka.onOff){
+			ka.stops();	
+		}else{
+			ka.setIntervals();	
+		}
+		if(ka2.onOff){
+			ka2.stops();	
+		}else{
+			ka2.setIntervals();	
+		}
+	 }
+	 
+	 
+	
+}	
+  function Change(id,ids){
+	this.oWrap=document.getElementById(id);
+	this.aBtn=this.oWrap.getElementsByTagName('input');
+	this.aDiv=this.oWrap.getElementsByTagName('div');  	
+	this.timer=null;
+	this.n=0;
+	this.onOff=false;
+  }	
+  //点击（执行）选项卡
+  Change.prototype.gos=function(){
+	  var _this=this;
+	  for(var i=0;i<this.aBtn.length;i++){
+		this.aBtn[i].index=i;
+		this.aBtn[i].onclick=function(){
+			_this.n=this.index;
+			_this.clicks();
+				
+		}
+			
+	  }
+  }
+  Change.prototype.clicks=function(){
+	  for(var i=0;i<this.aBtn.length;i++){
+				this.aDiv[i].className=' ';
+				this.aBtn[i].className=' ';
+			}
+			
+	  this.aDiv[this.n].className='blocks';
+	  this.aBtn[this.n].className='bg';
+  }
+  //开启自动选项
+  Change.prototype.setIntervals=function(){
+	  	var _this=this;
+		clearInterval(this.timer);
+		this.onOff=true; 
+		this.timer=setInterval(function(){
+			for(var i=0;i<_this.aBtn.length;i++){
+					_this.aDiv[i].className=' ';
+					_this.aBtn[i].className=' ';
+			}	
+			if(_this.n>=_this.aBtn.length){
+				_this.n=0;	
+			}
+			_this.aDiv[_this.n].className='blocks';
+			_this.aBtn[_this.n].className='bg';
+			_this.n++;
+		},600);  
+  }
+   //停止自动选项
+  Change.prototype.stops=function(){
+	this.onOff=false;
+	clearInterval(this.timer);  
+  }
+  
+</script>
+</head>
+<body>
+	<div id="wrap">	
+    	<input type="button" value="按钮1" class="bg"/>
+        <input type="button" value="按钮2" />
+        <input type="button" value="按钮3" />
+        <div class="blocks">111111</div>
+        <div>222222</div>
+        <div>333333</div>
+    </div>
+    <div id="two_wrap">	
+    	<input type="button" value="按钮1" class="bg"/>
+        <input type="button" value="按钮2" />
+        <input type="button" value="按钮3" />
+        <div class="blocks">111111</div>
+        <div>222222</div>
+        <div>333333</div>
+    </div>
+    <div id="btns">
+         <input type="button" value="开启第一个自动" />
+         <input type="button" value="停止第一个自动" />
+         <input type="button" value="开启第二个自动" />
+         <input type="button" value="停止两个自动" />
+         <input type="button" value="反转" />
+    </div>
+</body>
+</html>

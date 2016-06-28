@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>键盘控制多方向移动的游戏</title>
+<style>
+body,div,span,input，p,ul,li,img{
+	margin:0;
+	padding:0;
+	}
+#wrap{
+	width:60px;
+	height:60px;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:4;
+}
+.left{
+	background:url(images/2.png) no-repeat center center;
+	}
+.right{
+	background:url(images/3.png) no-repeat center center;
+	}
+.top{
+	background:url(images/4.png) no-repeat center center;
+	}
+.bottom{
+	background:url(images/1.png) no-repeat center center;
+	}
+.gre{
+	width:20px;
+	height:20px;
+	position:fixed;
+	top:0;
+	left:0;
+	background:green;
+	border:1px solid #F00;
+	border-radius:50%;
+	z-index:2;
+	}			
+</style>
+<script>
+window.onload=function(){
+	var oWrap=document.getElementById('wrap');
+	var keyCodeArr=[];
+	var tim=null;
+	var tims=null;
+	var L=0;
+	var T=0;
+	var dir='bottom';
+	document.onkeydown=function(ev){
+		
+		keyCodeArr[ev.which]=true;
+		if(keyCodeArr[32]){
+			biu();	
+		}
+	}
+	document.onkeyup=function(ev){
+		keyCodeArr[ev.which]=false;
+	}
+	
+	tim=setInterval(function(){
+		
+		if(keyCodeArr[37]){
+			L=oWrap.offsetLeft-10;
+			dir='left';	
+		}
+			
+		if(keyCodeArr[38]){
+			T=oWrap.offsetTop-10;
+			dir='top';
+		}
+			
+		if(keyCodeArr[39]){
+			L=oWrap.offsetLeft+10;	
+			dir='right';
+		}
+			
+		if(keyCodeArr[40]){
+			T=oWrap.offsetTop+10;
+			dir='bottom';
+		}
+		if(L<0){
+			L=0;	
+		}else if(L>window.innerWidth-oWrap.offsetWidth){
+			L=window.innerWidth-oWrap.offsetWidth;
+		}
+		if(T<0){
+			T=0;	
+		}else if(T>window.innerHeight-oWrap.offsetHeight){
+			T=window.innerHeight-oWrap.offsetHeight;
+		}
+		oWrap.style.top=T+'px';
+		oWrap.style.left=L+'px';
+		oWrap.className=dir;
+	},20);
+	
+	function biu(){
+		var gren=document.createElement('div');
+		gren.className='gre';	
+		document.body.appendChild(gren);
+		
+		gren.style.left=oWrap.getBoundingClientRect().left-gren.offsetWidth/2+oWrap.offsetWidth/2+'px';
+		gren.style.top=oWrap.getBoundingClientRect().top-gren.offsetHeight/2+oWrap.offsetHeight/2+'px';
+		
+		var speed=10;
+		var attr=dir;
+		if(dir=='left'||dir=='top'){
+			speed=-speed;	
+		}else{
+			if(dir=='right'){
+				attr='left';	
+			}else{
+				attr='top';	
+			}
+		}
+		tims=setInterval(function(){
+			var getAttr=parseFloat(getComputedStyle(gren)[attr]);
+			gren.style[attr]=getAttr+speed+'px';	
+		},16);	 
+	}
+	
+
+}
+</script>
+</head>
+<body>
+    <div id="wrap" class="bottom"></div>
+</body>
+</html>
