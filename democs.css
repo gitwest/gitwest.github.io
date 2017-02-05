@@ -122,7 +122,7 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 .plate{
 	font-family:"微软雅黑";
 }
-.plate:nth-of-type(1){
+/*.plate:nth-of-type(1){
 	background:url(img/b1.jpg) no-repeat;
 }
 .plate:nth-of-type(2){
@@ -133,20 +133,25 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 }
 .plate:nth-of-type(4){
 	background:url(img/b4.jpg) no-repeat;
+}*/
+.body_bg{
+	background: #eee;
+}
+.plate_all{
+	width:1000px;
+	margin: 0 auto;
+	background:rgba(153,153,255,0.8);
 }
 .wrap_one{
 	width:1000px;
-	height:620px;
-	border:2px solid  #999;
-	border-radius:5px;
+	/*height:620px;*/
+	/*border:2px solid  #999;*/
+	/*border-radius:5px;*/
 	border-bottom:none;
-	background:rgba(153,153,255,0.6);
+	/*background:rgba(153,153,255,0.6);*/
 	position:relative;
-	background:#666;
 }
 /*三大滚动板块 结束*/
-
-
 
 /*	个人简介区域（logo区）  开始*/
 #logo{
@@ -244,7 +249,7 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 }
 #logo span{
 	position:absolute;
-	color:#7891af;
+	color:#f33;
 	font-size:14px;
 	position:absolute;
 	top:148px;
@@ -673,11 +678,13 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 #interest{
 	width:800px;
 	height:130px;
-	margin:0 auto;
+	margin:20px auto;
 	overflow:hidden;
 	position:relative;
 }
-
+.martop_{
+	margin-top: 20px;
+}
 /*inter_list 下li的达到运动效果的关键帧*/
 @keyframes moveInter{
 	

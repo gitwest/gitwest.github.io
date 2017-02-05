@@ -1,7 +1,4 @@
-// JavaScript Document
 window.onload=function(){
-	
-	
 	//js实现自适应
 	var scrollPlate=document.getElementsByClassName('plate');
 	var	wrapOne=document.getElementsByClassName('wrap_one');
@@ -15,8 +12,9 @@ window.onload=function(){
 		setSide();
 		
 		//当窗口缩放大小时 判定滚动屏按钮的隐藏和显示效果 
+		//以1200作为是否显示滚动屏按钮的依据
 		var scrollOnOff=false;
-		if(document.documentElement.clientWidth==1349){
+		if(document.documentElement.clientWidth>=1200){
 			scrollOnOff=true;
 		}
 		if(scrollOnOff){
@@ -32,7 +30,7 @@ window.onload=function(){
 		 proT=oProject.getBoundingClientRect().top;
 	}
 	
-	if(document.documentElement.clientWidth!=1349){
+	if(document.documentElement.clientWidth<1200){
 			scrollUl.style.display='none';
 	}	//console.log(scrollPlate[0].offsetWidth,document.documentElement.clientWidth,window.innerWidth)
 	//分别调用
@@ -42,16 +40,17 @@ window.onload=function(){
 		}
 	}
 	//自适应窗口函数封装
+	
 	function windSide(obj1,obj2){
 		var scrollW=document.documentElement.clientWidth;
 		var scrollH=document.documentElement.clientHeight;
 		//最外层宽、高设置
-		obj1.style.width=scrollW+'px';	
-		obj1.style.height=scrollH+'px';	
-		obj1.style.minHeight=obj2.offsetHeight+'px';	
-		
+		obj1.style.minHeight=obj2.offsetHeight+'px';
+		//obj1.style.width=scrollW+'px';	
+		//obj1.style.height=scrollH+'px';	
 		//主要内容区（wrap_one）宽度自适应设置
-		obj2.style.left=(scrollW-obj2.offsetWidth)/2+'px';
+		//obj2.style.left=(scrollW-obj2.offsetWidth)/2+'px';
+
 	}
 	
 
@@ -175,7 +174,7 @@ window.onload=function(){
 				
 		}
 	
-		//封装图片运动的核心函数
+		//封装图片运动的函数
 		function change(){
 			n++;
 			if(n>arrImg.length-1){
@@ -189,7 +188,6 @@ window.onload=function(){
 			clearInterval(timers);
 			var arr=[];
 			var m=0;
-			//alert(oP.offsetTop)
 			for(var i=190;i>=170;i-=2){
 				arr.push(i+2,i);
 			}	
