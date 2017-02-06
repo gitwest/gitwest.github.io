@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+<div id="onofmeit"></div>
+<script src="regular.min.js"></script>
+<script>
+	var component = new Regular({
+		template:'<div on-click="hello"> 点击触发$on绑定事件（console结果！）</div>'   //这里事件绑定的是hello
+	});
+
+	var clickhandler1 = function(arg1){ console.log('clickhandler1:' + arg1)}
+	var clickhandler2 = function(arg1){ console.log('clickhandler2:' + arg1)}
+	var clickhandler3 = function(arg1){ console.log('clickhandler3:' + arg1)}
+
+	component.$on('hello', clickhandler1);
+	component.$on('hello', clickhandler2);
+	component.$on({'other': clickhandler3 });
+
+	component.$on('hello', function(arg1){   //也可以是匿名函数
+		console.log('clickhandler4:' + arg1)
+	});
+
+	////////////////////////////////////////////////////////////////
+	//component.$emit('hello', '这里是，监听回调函数的参数'); // 触发hello(指定)事件
+
+	//component.$off('hello', clickhandler1) // 移除hello下的clickhandler1函数
+
+	//component.$emit('hello', 2); // 触发hello事件，监听回调函数中的参数是 2
+
+	//component.$off('hello') // 移除hello下的所有函数
+
+	//component.$off() // 移除component下的所有函数
+
+	//component.$emit('other','这是参数');//触发other(指定)事件
+
+	component.$inject('#onofmeit');
+</script>
+</body>
+</html>

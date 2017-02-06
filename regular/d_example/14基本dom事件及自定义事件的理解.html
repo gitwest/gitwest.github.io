@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+
+		//基本DOM事件,绑定的为表达式
+
+		// var Compon = Regular.extend({
+		//   template:
+		//   "<button on-click={count = count+1}> count+1 </button> \
+		//         <b>{count}</b><hr/>",
+		// });
+
+		// var compon = new Compon({
+		// 	data:{
+		// 		count:10,
+		// 	}
+		// });
+
+		// compon.$inject('#app');
+
+
+////////////////////////////////////////////////////////////
+
+		//DOM事件，当点击执行的是组件内的函数（fn）的时候，调用方式！其中模板中this的指向是组件（compon）本身！
+
+		// var Compon = Regular.extend({
+		//   template:
+		//   "<button on-click={this.fn()}> add </button> \
+		//         <b>{add}</b><hr/>",
+		// });
+
+		// var compon = new Compon({
+		// 	data:{
+		// 		add:22,
+		// 	},
+		// 	fn:function(){
+		// 		this.data.add = 1024;
+		// 	}
+		// });
+
+		// compon.$inject('#app');
+
+
+//////////////////////////////////////////////////////////////
+
+		//自定义DOM事件
+
+		var Compon = Regular.extend({
+			template:'<textarea id="btn" on-enter={this.submit($event)}>文本域内容</textarea>',
+		});
+
+		
+		//自定义一个  回车键  事件，这个达到的效果是：当按下 回车键 时，执行submit函数！
+		var dom=Regular.dom;
+
+		//自定义 回车键 事件
+		Compon.event('enter',function(ele,fire){
+			function update(ev){
+				if(ev.which == 13){
+					ev.preventDefault();
+					fire(ev);
+					alert(121);
+				}
+			}
+			
+			//让自定义的 回车键 事件，按下键盘的时候触发！
+		 dom.on(ele,"keypress",update);
+			return function destroy(){ //这里返回一个用于销毁工作的销毁函数，不需要销毁函数时可以不用返回
+				dom.off(ele,"keypress",update);
+			}
+		 });
+
+		//注意：compon要在 自定义事件 后面（定义）执行，看好执行顺序！这里的执行顺序是先执行submit函数（弹出 88888），在执行update函数中的内容（这里弹出121）！！！
+		var compon = new Compon({
+			submit:function($event){
+				alert(88888);
+			}
+
+		});
+
+		compon.$inject('#app');
+	
+	</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		
+		//规则Rule：list 用于遍历
+
+		//模板中，items是要遍历的数据、item 为当前遍历到的值、item_index代表当前遍历到的下标
+		var Component = Regular.extend({
+			template:"{#list items as item}\
+					  <span class='index'>{item_index}:{item}</span>\
+					  {/list}",
+		});
+
+		//在结构中，结构生成相应 遍历个数的节点（这里生成对应的4个span节点）
+		var component = new Component({
+			data:{
+				items:['a','b','c','d']
+			}
+		});
+
+		component.$inject('#app');
+
+		
+		///////////////////////////////////////////////////////
+		
+
+		
+	</script>
+</body>
+</html>

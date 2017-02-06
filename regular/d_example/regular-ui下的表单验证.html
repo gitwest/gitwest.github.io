@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vail</title>
+    <link rel="stylesheet" type="text/css" href="regular-ui.default.min.css">
+    <style type="text/css">
+	.m-form .green{ color:green; width: 400px;}
+    </style>
+</head>
+<body>
+    <div class="valitions"></div>
+</body>
+<script src="regular.min.js"></script>
+<script src="regular-ui.min.js"></script>
+<script type="text/regular" id="reform">
+    <form class="m-form">
+    <validation ref="validation">
+        <div class="u-formitem">
+            <label class="formitem_tt">用户名<span class="formitem_rqr">*</span>：</label>
+            <span class="formitem_ct">
+                <input2 rules={nameRules} value={username} placeholder={usena} maxlength=12 tip="4~12个字符，包括字母、数字、下划线" />
+            </span>
+        </div>
+        <div class="u-formitem">
+            <label class="formitem_tt">邮箱<span class="formitem_rqr">*</span>：</label>
+            <span class="formitem_ct">
+                <input2 rules={emailRules} value={emails}  tip="请输入标准的邮箱" />
+            </span>
+        </div>
+        <div class="u-formitem">
+            <label class="formitem_tt">手机号<span class="formitem_rqr">*</span>：</label>
+            <span class="formitem_ct">
+                <input2 rules={iphoneRules} value={phones}  tip="请输入标准的手机号" />
+            </span>
+        </div>
+        <div class="u-formitem">
+            <label class="formitem_tt">设置密码<span class="formitem_rqr">*</span>：</label>
+            <span class="formitem_ct">
+                <input2 type="password" rules={passwordRules} value={password} maxlength=18 tip="6~18个字符，包括字母、数字、下划线" />
+            </span>
+        </div>
+        <div class="u-formitem">
+            <label class="formitem_tt">确认密码<span class="formitem_rqr">*</span>：</label>
+            <span class="formitem_ct"><input2 type="password" rules={confirmRules} maxlength=18 value={re_pasword} tip="请确认密码"/></span>
+        </div>
+        <div class="u-formitem">
+            <span class="formitem_ct"><a class="u-btn u-btn-primary" on-click={this.submit()}>立即注册</a></span>
+        </div>
+    </validation>
+    </form>
+</script>
+<script>
+var component = new RGUI.Component({
+    template: '#reform',
+    data: {
+        nameRules: [
+            {type: 'isFilled', on:'blur',message: '请输入用户名！'},
+            {type: 'isLength', on:'keyup+blur',min: 4, max: 12, message: '请输入4~12个字符！'}
+        ],
+        emailRules:[
+        	{type:'isFilled',on:'blur',message:'请输入邮箱！'},
+        	{on:'keyup+blur',message:'请输入正确格式的邮箱！',method:function(value){
+        		//自定义验证一个邮箱的正则(返回一个布尔值)
+        		return value.match(/^[\w\.\-]+@[\w\-]+\.\w+$/);
+        	}}
+        ],
+        iphoneRules:[
+        	{type:'isFilled',on:'blur',message:'请输入手机号码！'},
+        	{on:'keyup+blur',message:'请输入正确格式的手机号码！',method:function(value){
+        		//自定义验证一个手机号的正则(返回一个布尔值)
+        		return value.match(/^1(([3458][0-9])|(7[678]))[0-9]{8}$/);
+        	}}
+        ],
+        passwordRules: [
+            {type: 'isFilled',on:'blur', message: '请设置密码！'},
+            {type: 'isLength',on:'keyup+blur', min: 6, max: 18, message: '请输入6~18个字符！'}
+        ],
+        confirmRules: [
+            {type: 'isFilled',on:'blur', message: '请确认密码！'},
+            {message: '两次密码不一致！',on:'keyup+blur', method: function(value) {
+                return value === component.data.password;
+            }}
+        ],
+       
+        usena:'用户名哦！',
+    },
+    submit: function() {
+        var conclusion = this.$refs.validation.validate();
+      	//表单验证成功时执行
+        if(conclusion.success){
+        	//input2标签中username、password、re_pasword分别表示在页面中用户名、密码等的输入值(value值)。
+        	console.log(component.data.username);
+      		console.log(component.data.password);
+      		console.log(component.data.re_pasword);
+        }else{
+        	return
+        }
+    },
+
+});
+component.$inject('.valitions');
+</script>
+</html>

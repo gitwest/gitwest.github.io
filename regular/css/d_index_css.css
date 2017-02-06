@@ -1,0 +1,196 @@
+@charset "UTF-8";
+	html,body {
+	height:100%
+}
+body,form,ul,ol,table,input,button,p,h1,h2,h3,h4,h5,h6,blockquote,pre,dl,dt,dd,div,span,b,i {
+	margin:0;
+	padding:0;
+}
+body {
+	color:#222;
+	background-color:#fff;
+	font-size:14px;
+	word-wrap:break-word;
+	line-height:1em
+}
+h1 {
+	font-size:2.25em;
+	font-weight:200
+}
+h2 {
+	font-size:1.75em;
+	font-weight:200
+}
+h3 {
+	font-size:1.5em;
+	font-weight:200
+}
+h4 {
+	font-size:1.2em;
+	font-weight:200
+}
+h5 {
+	font-size:1.0em;
+	font-weight:200
+}
+h6 {
+	font-size:.8em;
+	font-weight:200
+}
+button::-moz-focus-inner,input[type=button]::-moz-focus-inner,input[type=reset]::-moz-focus-inner,input[type=submit]::-moz-focus-inner {
+	padding:0;
+	outline:0;
+	border:0
+}
+input,select,textarea,button,body,code {
+	font-family:"Microsoft Yahei","Helvetica Neue",Helvetica,Arial,sans-serif
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0
+}
+img {
+	border:0;
+	vertical-align:top
+}
+a {
+	color:#136ec2;
+	text-decoration:none;
+	outline:0
+}
+a[data-href] {
+	cursor:pointer
+}
+a:active {
+	background-color:transparent
+}
+button:focus,input:focus {
+	outline:0
+}
+embed,embed:focus {
+	outline:0
+}
+span,span:focus {
+	outline:0
+}
+input,textarea {
+	outline:0
+}
+textarea {
+	overflow-y:auto
+}
+textarea:disabled,input:not([type]):disabled,input[type=color]:disabled,input[type=date]:disabled,input[type=datetime]:disabled,input[type=datetime-local]:disabled,input[type=email]:disabled,input[type=month]:disabled,input[type=password]:disabled,input[type=number]:disabled,input[type=search]:disabled,input[type=tel]:disabled,input[type=text]:disabled,input[type=time]:disabled,input[type=url]:disabled,input[type=week]:disabled {
+	background-color:#ebebe4
+}
+input:disabled,textarea:disabled {
+	color:#545454
+}
+ul li{
+	list-style: none;
+}
+.clearfix:before,.clearfix:after {
+	content:" ";
+	display:table;
+}
+.clearfix:after {
+	clear:both
+}
+.pull-right {
+	float:right
+}
+.pull-left {
+	float:left
+}
+
+.bigWrap{ position: absolute;top:0;left: 25%;width:65%; padding:0 50px 50px 50px;border:1px solid #333;line-height:50px; font-family: "微软雅黑" "宋体";border-radius: 5px; }
+.tit{text-align: center;border-bottom:2px solid #c33f88;}
+.wrap_main{margin-top: 30px;}
+.mar_border{border-bottom:2px solid #FDE;}
+.exp{ padding:20px;background:#ccc;border:1px solid #ccc;margin: 30px 0 30px 0;}
+.mar-btm{margin-bottom: -20px;}
+.forex{margin:20px 0 -20px 0;color: #fff;background: #666;}
+.wrap_des{border: 1px solid #ccc;margin-top: 50px;background: #eee;padding-bottom: 10px;}
+.sty_p{margin-left: 40px;line-height: 24px;margin-top: 20px;}
+.codes{line-height: 14px;}
+/*目录*/
+.fix_wrap{position: relative;}
+.d_list{width:19%;border: 2px solid #999;padding: 10px;position: fixed;top:2%;left:1%;z-index: 31;background:#eee;box-shadow: 8px 8px 20px #c33f88;border-radius: 5px; }
+.d_list li{line-height: 25px;margin-left: 8%;word-wrap: break-word;}
+.d_list li a{word-wrap: break-word;display: inline-block;}
+.d_list .d_list_tit{margin-left: 2%;font-size: 16px;}
+.d_line{width:0px;height:40px;border:1px solid #c33f88;position: absolute;top:100.5%;left:48%;z-index: 2;}
+.d_title_rgl{width:97%;padding:5px;text-align: center;box-shadow: 8px 8px 20px #c33f88;animation: 1.7s active_sou infinite linear;-webkit-animation: 1.7s active_sou infinite ;position: absolute;top:107%;left:0%;z-index: 32;background:#999;border: 1px solid #eee;border-radius: 5px;}
+.d_name{font-size: 30px;}
+.list_scrol{overflow: auto;height: 500px;}
+.list_scrol li a:hover{ color:#f00; }
+@keyframes active_sou{
+	0%{
+		top:107%;
+		}
+	10%{
+		top:106.7%;
+		}
+	20%{
+		top:106.5%;
+		}
+	30%{
+		top:106%;
+		}
+	40%{
+		top:105.5%;
+		}
+	50%{
+		top:105%;
+		}
+	60%{
+		top:105.5%;
+		}
+	70%{
+		top:105.7%;
+		}
+	80%{
+		top:106%;
+		}
+	90%{
+		top:106.5%;
+		}
+	100%{
+		top:107%;
+		}
+	}
+@-webkit-keyframes active_sou{
+	0%{
+		top:107%;
+		}
+	10%{
+		top:106.7%;
+		}
+	20%{
+		top:106.5%;
+		}
+	30%{
+		top:106%;
+		}
+	40%{
+		top:105.5%;
+		}
+	50%{
+		top:105%;
+		}
+	60%{
+		top:105.5%;
+		}
+	70%{
+		top:105.7%;
+		}
+	80%{
+		top:106%;
+		}
+	90%{
+		top:106.5%;
+		}
+	100%{
+		top:107%;
+		}
+	}
+

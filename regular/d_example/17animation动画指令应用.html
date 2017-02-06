@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<link rel="stylesheet" href="animate.css">
+<style type="text/css">
+#box1,#box2,#box3,.oneDiv{ width:200px; height:200px; background: red;color: #fff;text-align: center;line-height: 200px;font-size: 30px;margin-bottom: 20px}
+.oneDiv.animated{transition: color 1s linear;}
+</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+	
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+	    // r-animation指令 ，实现基本的淡入淡出效果
+
+	    //执行步骤：1.当click触发时
+	    //2.div立即添加 类animated fadeIn，并且立即执行该动作，执行完毕后，将类animated fadeIn 立即移除！
+	    //3.等待1秒钟
+	    //4.div立即添加类animated fadeOut，并且立即执行该动作，执行完毕后，将类animated fadeOut 立即移除！
+
+	    //这里注意animated必须写上去！！！
+
+		// var Compon = Regular.extend({
+		// 	template:'<div class="oneDiv" r-animation="on:click;class: animated fadeIn; wait:1000;class: animated fadeOut;">{des}</div>',
+		// });
+
+		// var compon = new Compon({
+		// 	data:{
+		// 		des:'点击淡入淡出效果'
+		// 	}
+		// });
+
+		// compon.$inject('#app');
+
+/////////////////////////////////////////////////
+
+		//when  当表达式为真时 触发动画。
+
+		//这里通过点击DIV将 status 进行累加，当status累加到3时，触发swing（晃动）效果。
+
+		//这里注意 animated 这个类必须添加上去！！！
+
+		// var Compon = Regular.extend({
+		// 	template:'<div class="oneDiv animated" on-click={status = status+1} r-animation="when: status===3; class: swing;">{status}</div>'
+		// });
+
+		// var compon = new Compon({
+		// 	data:{
+		// 		status:1	
+		// 	}
+		// });
+
+		// compon.$inject('#app');
+
+////////////////////////////////////////////////////
+
+		//class: classes(空格分割的className), mode (添加class的模式,3个数字)
+
+		//Command: class的形为取决于 mode参数，一共有三种mode.
+
+		//1: 默认mode，首先加指定类名到节点，当动画结束移除它
+		//2: 首先添加class到节点，然后在nextTick添加class-active到节点用以触发动画，当动画结束移除所有类名，这个模式与angular类似。
+		//3: 与mode1类似，但是动画结束后，我们不移除类名
+		//4: 移除指定类名，并等待动画结束。
+
+		 //这里注意animated必须写上去！！！
+
+		// var Compon = Regular.extend({
+		// 	template:'<div id="box1" r-animation="on:click; class: animated fadeIn, 1">box1</div>\
+		// 			<div id="box2" r-animation="on:click; class: animated fadeIn, 2">box2</div>\
+		// 			<div id="box3" r-animation="on:click; class: animated fadeIn, 3">box3</div>'
+		// });
+
+		// var compon = new Compon({});
+
+		// compon.$inject('#app');
+
+///////////////////////////////////////////////////
+
+		//通过事件触发，达到动画联动效果   ,, 通过emit:event达到联动的联系
+
+		// var Compon = Regular.extend({
+		// 	template:'<div class="oneDiv animated" r-animation= "on:click;class:swing;emit:swing-over;class:shake;emit:shake-over">box1</div>\
+		// 	<div class="oneDiv animated" r-animation="on: swing-over;class:  swing; on:  shake-over; class: shake;">box2</div>'	          
+		// });
+
+		// var compon = new Compon({});
+
+		// compon.$inject("#app"); 
+
+///////////////////////////////////////////////////
+		//运行一个表达式并进入脏检查,达到动画联动效果   ,, 通过call达到联动的联系
+
+
+		// 流程如下:
+
+		// 1.当 test == true 激活box1的动画
+		// 2.swing动画结束之后，设置otherSwing=true
+		// 3.这个导致box2的动画序列开始
+		// 4.box2 swing box1也在进行shake
+		
+		// var Compon = Regular.extend({
+		// 	template:'<div class="oneDiv animated" r-animation="when:test; class: swing ;call: otherSwing=true ;class: shake">box1</div>\
+		// 		<div class="oneDiv animated" r-animation="when: otherSwing; class: swing; ">box2</div>\
+		// 		<button on-click={test = true}>点击联动起来</button>'	          
+		// });
+
+		// var compon = new Compon({
+		// 	data:{
+		// 		test:false
+		// 	}
+		// });
+		
+		// compon.$inject("#app"); 
+
+//////////////////////////////////////////////////////
+		
+		//控制style下transition属性的达到的动画效果
+		//设置样式并且等待 transitionend（如果可以触发的话）
+
+		// 执行步骤：
+		// 1.一旦点击，swing动画。
+		// 2.结束后设置style.color=#333(激活另外transition)...
+		// 3.步骤结束后，进行bounceOut动画。
+		// 4.动画序列结束
+
+		//这里注意样式中，添加的一个transition属性
+
+		var Compon = Regular.extend({
+			template:'<div class="oneDiv animated" r-animation="on:click; class:swing;style:color #333;class:bounceOut;style:display none;">click me</div>'
+		});
+
+		var compon = new Compon({}).$inject('#app');
+
+
+	</script>
+</body>
+</html>

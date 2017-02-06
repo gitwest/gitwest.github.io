@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+		<input type="text" r-model={ username } />{username}
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+	
+		var HelloRegular = Regular.extend({
+			template:"#hello",
+		});
+
+		var component = new HelloRegular({
+			data:{
+				username:"leo"
+			}
+		})	
+		
+		// Regular.directive("r-model",function(ele,expr){
+
+		// 	var self = this;
+		// 	this.$watch(expr,function(nval){
+		// 		ele.value = nval;
+		// 	})
+
+		// 	ele.addEventListener("input",function(){
+		// 		self.$update(expr,this.value);
+		// 	})
+
+
+		// })
+		
+
+		//自定义指令Regular.directive（）
+
+		//这里以r-model的实现的实现原理为例！
+		Regular.directive('r-model',function(ele,val){
+			this.$watch(val,function(newValue){
+				ele.innerHTML = newValue
+			})
+		})
+
+		component.$inject("#app")
+
+	</script>
+</body>
+</html>

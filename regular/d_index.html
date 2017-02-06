@@ -1,0 +1,1751 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>文档</title>
+    <link rel="stylesheet" href="css/d_index_css.css">
+</head>
+<body style="background: #eee">
+	<div class="bigWrap">
+		<h1 class="tit">Regular.js</h1>
+
+		<!-- 一级标题、内容 开始-->
+		<h3 class="mar-btm"><a name="page1">1、静态接口</a></h3>
+		<div class="sty_p">
+			<p class="mar_border" >命名约定<br/>
+				· Component 表示此接口同时属于Regular及其子类.<br/>
+				· Regular　表示此接口只属于Regular本身(一般为全局配置参数).
+			</p>
+		</div>
+		<!-- 一级标题、内容 结束-->
+		<div class="wrap_main">
+			
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page2">1.1、Regular.extend</a></h3>
+				<p class="sty_p">Regular.extend(options)声明一个组件类，并通template将加载一个模板容器,参数options中的所有属性都会成为子组件的原型属性.</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+
+						<div id="app1"></div>
+
+						<script type="text/regular" id="hello" name="hello">
+							<input type="text" />
+							Hello, Guest～～～～hello,{username}
+
+						</script>
+
+						<script src="js/regular.min.js"></script>
+						<script>
+							//声明一个组件类，并通template将加载一个模板容器
+
+							var HelloRegular = Regular.extend({
+
+								template:'#hello',
+
+							});
+
+							//声明一个组件类，并通template将加载一个模板容器另一种编译方式
+							var Component = Regular.extend({
+
+								 template: 
+
+								  "<div><h2 on-click={this.changeTitle(title + '1')}>{title}</h2>\
+								  <div>{content}</div></div>",
+								config: function(){},
+
+								init: function(){},
+
+								changeTitle: function(title){
+
+								  this.data.title = title;
+
+								}
+							})
+
+						</script>
+
+                    </code>
+                </pre>
+			</div>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page3">1.2、new Component(options)</a></h3>
+				<p class="sty_p">new Component(options),通过实例化传入的options将成为实例属性, 意味它将覆盖extend与implement的定义.</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+                    var component = new Component({
+
+					  // ...other options 
+
+					  data: {
+
+					    username: "leeluolee"
+
+					  }
+
+					})
+                     </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/1regularjs基本结构工作顺序.html">regularjs基本结构工作顺序</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page3.1">1.3、Component.component</a></h3>
+				<p class="sty_p">Component.component(name, factory),注册一个组件，这里类似于在extend({options})中声明的name.</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+                    			<div id="compons"></div>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+						//内嵌组件  我们可以在模板中利用<pager/> 来初始化的秘诀是name属性,name是一个全局配置。
+
+						var Pager = Regular.extend({
+
+						  name: 'pager',
+
+						  template:'<pager current=1 on-nav={someCallback($event)} />'
+
+						});
+						var Pa = new Pager({});
+
+						//如果你需要在某个组件下用自定义的名字，可以使用Component.component接口。
+
+						Component.component('custm-page',Pager);
+
+						Pa.$inject('#compons');
+					</script>
+                     </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/21$component注册组件.html">$component注册组件</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page4">1.4、Component.filter</a></h3>
+				<p class="sty_p">Component.filter：regularjs 当然也支持普遍存在于模板中的过滤器，过滤器支持链式的多重调用.<br/>
+				regularjs也支持双向过滤, 来帮助你解决双向数据流的需求</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+					<div id="apps"></div>
+
+					<script type="text/regular" id="hello" name="hello">
+
+					</script>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+
+						//返回一个数组拼接成的字符串，此函数中的参数为模板中 需要过滤的内容
+
+						var add = function(arr){
+							return arr.join("+");
+						};
+
+						//Regular.filter("过滤器名称"，过滤器过滤的方法函数的名称)，
+						//当然此函数还可以写为匿名函数
+
+						Regular.filter("joins",add);
+
+						//过滤模板加载，注意读取数据的顺序
+
+						var Compon = Regular.extend({
+
+						  template:'<p>{ [1,2,3] | joins } = 6</p>',
+						});
+
+						var compon = new Compon({});
+
+						//compon.$inject('#apps');
+
+						//////////////////////////////////////////////
+
+						//多重过滤
+
+						//过滤器，多重过滤，匿名函数方法实现
+
+						Regular.filter('last',function(obj){
+
+							return obj[obj.length-1];
+
+						});
+
+						Regular.filter('lowercase',function(obj){
+
+							return obj.toLowerCase();
+
+						});
+
+						//过滤模板加载
+						var Compon = Regular.extend({
+
+						  template:'<p>{ list | last | lowercase }</p>',
+
+						});
+
+						//需要过滤的数据
+						var compon = new Compon({
+
+							data:{
+								list:['ADD','UPDATE','DELETE']
+							}
+
+						});
+
+						//compon.$inject('#app');
+
+					</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/15过滤器的基本使用.html">1、过滤器的基本使用</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="d_example/16过滤器的基本使用及多重过滤.html">2、过滤器的基本使用及多重过滤</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page5">1.5、Component.event（DOM事件）</a></h3>
+				<p class="sty_p">Component.event：Regular中，事件分为两类：1、DOM事件  2、组件事件</p>
+				<p class="sty_p">DOM 事件:所有节点上的on-开头的属性都会被作为DOM事件处理</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+        //DOM事件，当点击执行的是组件内的函数（fn）的时候，调用方式！其中模板中this的指向是组件（compon）本身！
+
+		// var Compon = Regular.extend({
+
+		//   template:
+
+		//   "<button on-click={this.fn()}> add </button> \
+
+		//         <b>{add}</b><hr/>",
+
+		// });
+
+		// var compon = new Compon({
+
+		// 	data:{
+
+		// 		add:22,
+		// 	},
+
+		// 	fn:function(){
+
+		// 		this.data.add = 1024;
+		// 	}
+		// });
+
+		// compon.$inject('#app');
+
+		//////////////////////////////////////////////
+
+		//$on绑定函数的解析
+
+		// var Component = Regular.extend({
+
+		// 	//在模板里面 直接写入要点击执行的函数名称
+
+		// 	template:'<h3>{count}</h3><hr/><button on-click="add"> count+1 </button>\
+		 <button on-click="minus"> count-1 </button>',
+
+		// 	init:function(){  //init 为初始化函数 ，名字不能变；
+
+		// 		//事件绑定（累加）
+
+		// 		this.$on('add',function($event){
+
+		// 			this.data.count += 1;
+		// 		});
+
+		// 		//事件绑定（累减）
+
+		// 		this.$on('minus',function($event){
+
+		// 			this.data.count -= 1;
+
+		// 		})
+		// 	}
+		// });
+
+		// var compon = new Component({
+
+		// 	data:{
+
+		// 		count:50
+
+		// 	}
+
+		// });
+
+		// compon.$inject("#app");
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/13$on事件函数绑定及$off的解绑.html">$on事件函数绑定及$off的解绑</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page6">1.6、Component.event（自定义事件）</a></h3>
+				<p class="sty_p">Component.event：Regular中，事件分为两类：1、DOM事件  2、组件事件</p>
+				<p class="sty_p">
+					自定义DOM事件:可以注册一些dom原生并不支持的事件，比如on-tap, on-hold.
+				</p>
+				<p class="sty_p">
+					注意regularjs遇到on-xx属性时，会首先去检查是否注册了xx这个自定义事件，如果没有，无论这个事件浏览器是否支持，都会走简单DOM事件的流/程（即都会通过addEventListener来绑定事件）
+				</p>
+				<p class="sty_p">
+				Arguments<br/>
+				event: 自定义事件名 (没有on-前缀)<br/>
+				fn(elem, fire)<br/>
+				elem: 绑定节点<br/>
+				fire: 触发器<br/>
+				注意如果需要做 销毁工作 ，与指令一样，你需要返回一个销毁函数
+				</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+				//自定义DOM事件
+
+				var Compon = Regular.extend({
+					template:'<textarea id="btn" on-enter={this.submit($event)}>文本域内容</textarea>',
+				});
+
+				
+				//自定义一个  回车键  事件，这个达到的效果是：当按下 回车键 时，执行submit函数！
+				var dom=Regular.dom;
+
+				//自定义 回车键 事件
+				Compon.event('enter',function(ele,fire){
+
+					function update(ev){
+
+						if(ev.which == 13){
+
+							ev.preventDefault();
+							fire(ev);
+							alert(121);
+						}
+					}
+					
+				//让自定义的 回车键 事件，按下键盘的时候触发！
+
+				dom.on(ele,"keypress",update);
+
+					return function destroy(){ 
+
+					//这里返回一个用于销毁工作的销毁函数，不需要销毁函数时可以不用返回
+
+						dom.off(ele,"keypress",update);
+					}
+				});
+
+		//注意：compon要在 自定义事件 后面（定义）执行，看好执行顺序！
+
+		//这里的执行顺序是先执行submit函数（弹出 88888），在执行update函数中的内容（这里弹出121）.
+				var compon = new Compon({
+
+					submit:function($event){
+
+						alert(88888);
+					}
+
+				});
+
+				//compon.$inject('#app');
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/14基本dom事件及自定义事件的理解.html">基本dom事件及自定义事件的理解</a>
+			</div>
+			<hr/>
+		<h3 class="mar-btm"><a name="page7">2、实例接口</a></h3>
+		<div class="sty_p">
+			<p class="mar_border" >
+				component即代表组件实例, 注意这些公有都有$前缀 意味不建议进行重写。
+			</p>
+		</div>
+		<div class="wrap_main">
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page8">2.1、component.$inject</a></h3>
+				<p class="sty_p">component.$inject(element[, direction])：插入组件到指定位置</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+						//$inject的基础用法
+
+						var Component = Regular.extend();
+
+						//这里是模板加载的另一种方法（template）
+
+						var component1 = new Component({
+
+							template:'<h2>{title}</h2>',
+
+							data:{title:'Example1'}
+
+						});
+						component1.$inject('#aapp');//默认添加到子元素末尾位置
+
+						/////////////////////////////////////////
+
+						var component2 = new Component({
+
+							template:'<h2>{title}</h2>',
+
+							data:{title:'Example2'}
+
+						});
+						component2.$inject('#aapp','top');//添加到子元素的首位
+
+						/////////////////////////////////////////
+
+						var component3 = new Component({
+
+							template:'<h2>{title}</h2>',
+
+							data:{title:'Example3'}
+						});
+						component3.$inject('#aapp','after');//添加到#app元素下边兄弟节点的位置
+
+						/////////////////////////////////////////
+						var component4 = new Component({
+
+							template:'<h2>{title}</h2>',
+
+							data:{title:'Example4'}
+						});
+
+						//component4.$inject('#aapp','before');//添加到#app元素上边兄弟节点的位置
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/3$inject的基础用法.html">$inject的基础用法</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page9">2.2、component.$update\$refs</a></h3>
+				<p class="sty_p">component.$update([expr] [, value])：由于regularjs是基于脏检查，所以当不是由regularjs本身控制的操作(如事件、指令)引起的数据操作，可能需要你手动的去同步data与view的数据. $update方法即帮助将你的data同步到view层</p>
+				<p class="sty_p">component.$refs：在模板中，你可以使用ref属性来标记一个节点或组件.　在实例化后，你可以通过component.$refs 来获取你标记的节点</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+		<div id="appw"></div>
+
+		<script type="text/regular" id="hello" name="hello">
+		</script>
+		<script src="regular.min.js"></script>
+		<script>
+			var component = new Regular({
+
+				template:"<h2 ref='h3' on-click={title=title.toLowerCase()}>{title}</h2>\
+				<p>{user.name}</p>",
+
+				data:{
+
+					title:'REGULARJS',
+
+					user:{
+
+						name:'ml',
+						age:22
+					}
+				}
+			})
+
+			//使用 component.$refs.h3 主要获取h2节点 
+
+			console.log(component.$refs.h3.innerHTML);//REGULARJS;  读取携带ref=h3的节点的内容
+
+			component.data.title = 'LIIEE'
+
+			console.log(component.$refs.h3.innerHTML);//REGULARJS
+
+			component.$refs.h3.click();//携带ref=h3的节点执行一下
+
+			console.log(component.$refs.h3.innerHTML);//liiee
+
+
+			//用于同步数据  将data直接同步到view上，相当于
+
+			component.$update({
+
+	  			"user.name": "leeluolee",
+	 			"user.age": 20
+
+			});
+
+			component.$update()  //注意$update数据定义好以后，此句代码的执行才能实现data同步到view上
+
+			//相当于这两句代码，但是这两句代并没不能及时的（直接的反应到视图上），
+			//需要某种执行（例如 点击）以后才能实现  数据到视图的转换
+
+			//component.data.user.name='leeluolee';
+
+			//component.data.user.age=20
+
+			console.log(component.data.user.age) 
+
+			//component.$inject('#appw');
+
+		</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/7$update与$refs的应用.html">$update与$refs的应用</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page10">2.3、component.$get</a></h3>
+				<p class="sty_p">component.$get(Expression|String)：获得一个Expression的值,类似于angular的$eval函数。</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">   
+                    <script>
+
+			var component = new Regular({
+
+				template:"<h2 ref='h3' on-click={title=title.toLowerCase()}>{title}</h2><p>{username}</p>",
+
+				data:{
+
+					title:'REGULARJS',
+				}
+
+			})
+			
+			component.$update({ 'username':'luo' })
+
+			component.$update()
+
+			component.data.username = 'leo';
+
+			component.data.job = 'developer';
+
+			//$get 获取最近一次改变的数据（username）
+
+			component.$get('username');
+
+			console.log(component.$get('username'))
+
+			//component.$inject('#app');
+
+			</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/12$get获取数据.html">$get获取数据</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page10.1">2.4、component.$watch 监听</a></h3>
+				<p class="sty_p">注册一个监听回调，一旦绑定的表达式的值发生改变，它将会被调用！component.$watch(expression, callback [, options])</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">  
+					<div id="watchs"</div>
+						<script type="text/regular" id="watches" name="hello">
+
+							<input r-model="username" /><span>老数据：{olderuser}&nbsp;||</span><i>&nbsp;
+							新数据：{username}</i>
+
+						</script>
+
+						<script src="regular.min.js"></script>
+
+						<script>
+							var compon = Regular.extend({
+
+								template:'#watches'
+
+							});
+							var com = new compon({
+
+								data:{
+
+									username:'dxj',
+
+									olderuser:'dj'
+								}
+							});
+							
+							com.$watch('username',function(newvalue,oldvalue){
+
+								//console.log(newvalue);
+								//console.log(oldvalue);
+
+								//注意组件内部调用数据的方式   this.data.olderuser
+
+								this.data.olderuser = oldvalue;
+
+							});
+
+							//com.$inject('#watchs');
+						</script>
+					
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/20监听器$watch.html">监听器component.$watch</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page10.2">2.5、component.$mute 组件失效</a></h3>
+				<p class="sty_p">可以使用$mute(true)让组件失效，使其不参与到脏检查中. 后续使用 $mute(false)　来重新激活一个被失效的组件,　激活的同时，会自动进行一次数据与ui同步.</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+
+					<div id="mutes">title添加到这里:</div>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+						var component = new Regular({
+
+						  template: '<h2>{title}</h2>',
+
+						  data: {
+
+						    title: "hello"
+						  }
+						})
+						// disable it（让组件失效）
+
+						component.$mute(true) ;
+
+						//组件失效后再怎么从新定义data都没有用
+
+						component.data.title = 'title changed';
+
+						component.$update();  //更新（下载）一次数据,页面仍显示hello
+
+						//激活组件，并且自动（更新数据）同步ui，这时页面显示title changed
+
+						component.$mute(false) ;
+
+						component.$inject('#mutes'); 
+
+					</script>	
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/22$mute失效组件.html">$mute失效组件</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page10.3">2.6、component.$on\$off\$emit </a></h3>
+				<p class="sty_p">component.$on(event, fn]):事件绑定；如果event参数传入一个Object, 会成为一个多重事件绑定。<br/>
+				component.$off([event] [,fn])：1.如果同时传入 event和fn,　则移除指定event类型下的fn函数。<br/>
+				2.只传入event, 移除所有event对应的监听器。<br/>
+				3.什么都不传，移除所有。<br/>
+				component.$emit(eventName [, args...])：触发指定事件。
+				</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+
+                    			<div id="onofmeits"></div>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+					var compon = Regular.extend({
+
+						template:'<div on-mouseover="hello">点击触发$on绑定的hello事件</div>'
+
+					});
+
+					var component = new compon({ });
+
+					var fn1 = function(arg){ console.log('fn1'+arg); };
+
+					var fn2 = function(arg){ console.log('fn2'+arg); };
+
+					var fn3 = function(arg){ console.log('fn3'+arg); }
+
+            				//绑定一个事件
+
+					component.$on("hello", fn1);
+					
+					//绑定多个事件
+
+					component.$on({
+
+					  notify: fn2,
+
+					  message: fn3
+
+					});
+
+					//component.$inject('#onofmeits');
+					</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/23$on$off$emit.html">关于事件的$on$off$emit</a>
+			</div>
+			<hr/>
+		</div>
+		<h3 class="mar-btm"><a name="page11">3、指令</a></h3>
+		<div class="sty_p">
+			<p class="mar_border" >Regularjs 提供了一些常用的内置指令<br/>
+				指令只能应用与节点，而不能应用与内嵌组件
+			</p>
+		</div>
+
+		<div class="wrap_main">
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page12">3.1、r-model</a></h3>
+				<p class="sty_p">r-model可以帮助您创建数据和表单元素之间双向绑定.</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">  
+
+					<div id="app"></div>
+
+					<script type="text/regular" id="hello" name="hello">
+
+						<!-- r-model指令在文本框/域的运用 -->
+
+						<textarea r-model='textarea'>{user}</textarea>
+
+						<input r-model='user' />{user}
+
+					</script>
+
+					<script src="js/regular.min.js"></script>
+
+					<script>
+
+						var Compon = Regular.extend({
+
+							template:'#hello',
+
+						});
+
+						var compon = new Compon({
+
+							data:{
+
+								user:'lee',
+							}
+						});
+
+						//compon.$inject("#app");
+					</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/5双向数据绑定及model指令在相关文本框域的运用.html">双向数据绑定r-model指令</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page13">3.2、r-style</a></h3>
+				<p class="sty_p">r-style是内联样式插值的改进</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+
+					<div id="appq"></div>
+					<script type="text/regular" id="helloo" name="hello">
+
+					<button class='btn' on-click={left=left+10} r-style={{left:left+'px',top:top+'px'}}>
+
+					left+10</button>left:{left}
+					
+					</script>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+
+						//按钮加上了 left属性（这里随着left的增加，有一个向右运动的效果）
+
+						// var app = new Regular({
+
+						// 	template:
+
+						// 	"<button class='btn'\
+
+						// 		on-click={left=left+10} r-style={{left:left+'px'}}>\
+
+						// 		left+10\
+
+						// 		</button>\
+
+						// 		left:{left}",
+
+						// 		data:{left:1}
+
+						//添加到了document中
+						// }).$inject(document.body)
+
+
+						//上面组件还可以写成以下形式,这里模块添到了#app的结构中
+
+						var componApp = Regular.extend({
+
+							template:'#helloo'
+
+						})
+
+						var ComponApp = new componApp({
+
+							data:{
+
+								left:1,
+
+								//这里注意r-style比style具有优先权
+								top:300
+							}
+						})
+
+						//ComponApp.$inject('#appq');
+
+					</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/6style指令的用法.html">style指令的用法</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page14">3.3、r-class与r-hide</a></h3>
+				<p class="sty_p">
+				r-class：根据判断的真假值来确定是否添加当前的class。<br/>
+				r-hide：根据判断条件会给相应的节点添加display:none。
+				</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">                
+			<style type="text/css">
+
+			.active{ width:200px;height:200px;background:#ccc;}
+
+			</style>
+
+				<div id="app"></div>
+
+				<script type="text/regular" id="hello" name="hello">
+
+				<div r-class={{"active":page=='block'}}  r-hide={ page !=='block' }>
+
+				{page}</div><button on-click={page="none"}>onClick_Hide</button>
+
+				</script>
+				<script src="regular.min.js"></script>
+
+				<script>
+				//  指令r-hide与r-class的综合应用，再此例中注意r-hid/r-class的写法！
+
+				var Compon = Regular.extend({
+
+					template:'#hello',
+
+				});
+
+				var compon = new Compon({
+
+					data:{
+
+						page:'block'
+
+					}
+				});
+
+				compon.$inject('#app');
+
+				</script>
+
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/8指令hide与class的综合应用.html">指令hide与class的综合应用</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page15">3.4、r-class与规则if的综合应用</a></h3>
+				<p class="sty_p">r-class：根据判断的真假值来确定是否添加当前的class。</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+            	<style type="text/css">
+
+		.activeRed{ width:200px;height:200px; background: red;}
+
+		.activePink{ width:200px;height:200px; background: pink;}
+
+		</style>
+
+		<div id="app"></div>
+
+		<script type="text/regular" id="hello" name="hello">
+
+		{#if page=="red"}
+
+		<div r-class={{"activeRed": page === "red"}}>{page}</div>
+
+		<button on-click={page="pink"}>change{page=='red' ? 'Pink' : 'Red'}</button>
+
+		{#else}
+
+		<div r-class={{"activePink": page === "pink"}}>{page}</div>
+
+		<button on-click={page="red"}>change{page=='red' ? 'Pink' : 'Red'}</button>
+
+		{/if}
+
+		</script>
+
+		<script src="regular.min.js"></script>
+
+		<script>		
+
+		//  指令r-class与规则if的综合应用，再此例中注意r-class的写法!!
+		var Compon = Regular.extend({
+
+			template:'#hello',
+		});
+
+		var compon = new Compon({
+
+			data:{
+
+				page:'red'
+
+			}
+		});
+
+		//compon.$inject('#app');
+
+		</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/11class指令与规则if的综合应用.html">class指令与规则if的综合应用</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page16">3.5、r-html</a></h3>
+				<p class="sty_p">r-html替换（添加）所选节点的内容，与innerHTML相似！</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">  
+
+					<div id="sapp"></div>
+
+					<script type="text/regular" id="hell" name="hello">
+
+						<p class="txtp" r-html={txt}>给我加点内容</p>
+
+					</script>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+						var com = Regular.extend({
+
+							template:'#hell'
+
+						});
+						var comsum1 = new com({
+
+							data:{
+
+								txt:'这是要通过r-html添加的内容！！'
+
+							}
+						});
+
+						var comsum2 = new com({
+
+							data:{
+
+								txt:'这是要通过r-html添加的内容！！,在#sapp节点下边'
+
+							}
+						});
+						//comsum1.$inject('#sapp');
+
+						//comsum2.$inject('#sapp','after');
+
+					</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/r-html.html">r-html</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page17">3.6、r-animation</a></h3>
+				<p class="sty_p">r-animation 用来实现声明式的动画，绝对你看到过的所有动画系统中最强大的一个，它可以以声明式的方式来获得动画序列，并且可以达到多节点的联动。</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+        <link rel="stylesheet" href="animate.css">
+
+	<style type="text/css">
+
+	#box1,#box2,#box3,.oneDiv{ width:200px; height:200px; background: red;color: #fff;
+
+		text-align: center;line-height: 200px;font-size: 30px;margin-bottom: 20px;}
+
+	.oneDiv.animated{transition: color 1s linear;}
+
+	</style>
+
+	<div id="app"></div>
+
+	<script type="text/regular" id="hello" name="hello">
+	
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+	    // r-animation指令 ，实现基本的淡入淡出效果
+
+	    //执行步骤：1.当click触发时
+
+	    //2.div立即添加 类animated fadeIn，并且立即执行该动作，执行完毕后，将类animated fadeIn 立即移除！
+
+	    //3.等待1秒钟
+
+	    //4.div立即添加类animated fadeOut，并且立即执行该动作，执行完毕后，将类animated fadeOut 立即移除！
+
+	    //这里注意animated必须写上去！！！
+
+		// var Compon = Regular.extend({
+
+		// 	template:'<div class="oneDiv" 
+		//r-animation="on:click;class: animated fadeIn; wait:1000;class: animated fadeOut;">{des}</div>',
+
+		// });
+
+		// var compon = new Compon({
+
+		// 	data:{
+
+		// 		des:'点击淡入淡出效果'
+
+		// 	}
+
+		// });
+
+		// compon.$inject('#app');
+
+		//////////详细r-animation指令参见下面实例。///////////////
+		</script> 
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/17animation动画指令应用.html">animation动画指令应用</a>
+			</div>
+			<hr/>
+		</div>
+		<h3 class="mar-btm"><a name="page18">4、规则Rule</a></h3>
+		<div class="sty_p">
+			<p class="mar_border" >
+			严格来说，在插值之外的语法功能, 都由RULE ,　RULE的语法是{#NAME ...}Block..{/NAME}。<br/>
+			目前rgl中只有三种Rule: list, if/else/elseif 和 include. 如果需要，未来也可能提供其它Rule。
+			</p>
+		</div>
+
+		<div class="wrap_main">
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page19">4.1、list</a></h3>
+				<p class="sty_p">list指令用来遍历某个sequence来循环的处理某些重复性的结构</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">      
+		<div id="appx"></div>
+
+		<script type="text/regular" id="hello" name="hello">
+
+		</script>
+
+		<script src="regular.min.js"></script>
+
+		<script>
+			
+			//规则Rule：list 用于遍历
+
+			//模板中，items是要遍历的数据、item 为当前遍历到的值、item_index代表当前遍历到的下标
+
+			var Component = Regular.extend({
+
+				template:"{#list items as item}\
+						  <span class='index'>{item_index}:{item}</span>\
+						  {/list}",
+
+			});
+
+			//在结构中，结构生成相应 遍历个数的节点（这里生成对应的4个span节点）
+
+			var component = new Component({
+
+				data:{
+
+					items:['a','b','c','d']
+
+				}
+			});
+
+			//component.$inject('#appx');
+
+			</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/9规则Rule（list_if）.html">规则Rule（list）</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page20">4.2、if_else</a></h3>
+				<p class="sty_p">if/else/elseif与其它模板引擎(如freemarker)一样, regular也提供了if,elseif,else等语法元素提供对逻辑控制的支持。</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">      
+		<div id="cpp"></div>
+
+		<script type="text/regular" id="hell" name="hello">
+
+		</script>
+
+		<script src="regular.min.js"></script>
+
+		<script>
+
+			//if/else/elseif 对属性的逻辑控制
+
+			var Attr = Regular.extend({
+
+				template:"<input  {#if !disabled}   {#else} disabled r-model='hi' {/if} /> {hi}<br/>\
+					   <button on-click={ disabled = !disabled}>{disabled ? 'active' : 'disable'} it</button>"
+
+			});
+
+			var attr = new Attr({
+
+				data:{
+
+					hi: 'hello world !'
+
+				}
+			}); 
+
+			//attr.$inject('#cpp');
+		</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/19.规则if_else.html">规则if_else</a>
+			</div>
+			<hr/>
+
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page21">4.3、if_else几个实例应用</a></h3>
+				<p class="sty_p">if/else/elseif与其它模板引擎(如freemarker)一样, regular也提供了if,elseif,else等语法元素提供对逻辑控制的支持。</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes">
+                    <div id="appd"></div>
+
+					<script type="text/regular" id="hellod" name="hellod">
+
+			<!-- username不为空时，进入携带退出功能的页面，点击logout时，清空username的值；
+
+			username为空时，进入携带进入功能的页面，点击登陆在extend时添加原型方法(login)
+
+			从新定义username的值-->
+
+				{#if username}
+
+					Hello,{username} <a href="javascript:;" on-click={username=" "}> logout </a>
+
+				{#else}
+
+					Sorry,Guest.Please <a href="javascript:;" on-click={this.login()}> login </a>
+
+				{/if}
+			</script>
+
+			<script src="regular.min.js"></script>
+			<script>
+
+				//这种写法有利于共用方法（login）的复用
+
+				var HelloRegular = Regular.extend({
+
+					template:"#hellod",
+
+					login:function(){
+
+						var data = this.data;
+
+						data.username = prompt("请输入用户名","")
+
+					}
+				});
+
+				var component = new HelloRegular({
+
+					data:{
+
+						username:"leo"
+
+					}
+				});
+				var com = new HelloRegular({
+
+					data:{
+
+						username:""
+
+					}
+				});
+
+				//component.$inject("#appd");
+
+				com.$inject("#appd","after");
+			</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/2extend(复用的体现)页面登陆登出功能.html">1、extend(复用的体现)页面登陆登出功能</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="d_example/10if_else未登陆情况.html">2、if_else未登陆情况</a>
+			</div>
+			<hr/>
+			<h3 class="mar-btm"><a name="page21.1">5、rgl重点、难点解析</a></h3>
+		<div class="sty_p">
+			<p class="mar_border" >不同组件中data数据的调用，函数调用方式，表单验证···</p>
+		</div>
+
+		<div class="wrap_main">
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page21.2">5.1、不同组件中data数据的调用，绑定函数及其调用方式</a></h3>
+				<p class="sty_p">不同组件中data数据的调用，绑定函数及其调用方式</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes"> 
+						
+					    <div id="test"></div>
+
+					    <btn></btn>
+					
+					<script type="text/regular" id="inpt">
+
+					    <form r-class={{'inp_mar':bol}}>
+
+					        <input placeholder="请输入"  type="text" r-model='inp_contet'/><span>{inp_contet}</span>
+
+					    </form>
+
+					</script>
+
+					<script type="text/regular" id="btns">
+
+					    <div class="test_btn">
+
+					        <button on-click={this.inphtml(btn_one)} ref="bt" >{btn_one}</button>  <!-- 能将同组件的data调用方法弹出来 -->
+
+					    </div>
+					</script>
+
+					<script src="regular.min.js"></script>
+
+					<script>
+					var inp = Regular.extend({
+
+					    template:"#inpt"
+
+					});
+					var btn = Regular.extend({
+
+					    name:'btn',
+
+					    template:'#btns',
+
+					});
+
+					var Inps = new inp({
+
+					    data:{
+
+					        inp_contet:'inpt模板',
+
+					        bol:true
+					    }
+					});
+
+					var btn_ones = new btn({ 
+
+					    data:{
+
+					        btn_one:'弹出同组件,同模板中的内容', 
+
+					        btOne_content:'我是组件btn_ones的data数据',
+
+					    },
+
+					    inphtml:function(arg){
+
+					        alert(arg);
+					    }
+					});
+
+				var btn_twos = new btn({ 
+
+				    data:{
+
+				        btn_one :'btn_twos组件的按钮',
+
+				    },
+
+				    inphtml:function(arg){
+
+			        //在点击btn_twos组件按钮时通过on绑定可以调用外部函数changefn。
+
+			        btn_twos.$on('alerts',changefn);
+
+			        //调用组件自身的data数据（btn_one）
+
+			        btn_twos.$emit('alerts',arg);
+
+			        //函数每执行一次进行解绑一次，不然会出现累加性的多次调用情况
+
+			        btn_twos.$off('alerts');
+
+			        btn_twos.$on('alertOther',othercompon);
+
+			        //调用同模板不同组件化（btn_ones）的data数据（btOne_content）
+
+			        btn_twos.$emit('alertOther',btone_test);
+
+			        //函数每执行一次进行解绑一次，不然会出现累加性的多次调用情况
+
+			        btn_twos.$off('alertOther');
+
+			        //在绑定、调用含有（r-model）的文本框之类的input前，一定要变量（inp_test）从新获取一下值，
+
+			        //不然作为参数（inp_test）不是最新值！！
+
+			        inp_test = Inps.data.inp_contet;
+
+			        //调用不同模板，不同组件化（Inps）的data数据
+
+			        btn_twos.$on('alertmoudel',othermoudel);
+
+			        btn_twos.$emit('alertmoudel',inp_test);
+
+			        //函数每执行一次进行解绑一次，不然会出现累加性的多次调用情况
+
+			        btn_twos.$off('alertmoudel');
+			    }
+			}); 
+
+				//在全局定义一下各组件的data数据，才能在组件中被调用！
+
+				var inp_test = Inps.data.inp_contet;
+
+				var btone_test = btn_ones.data.btOne_content;
+
+				var changefn = function(args){
+
+				    alert(args+"___引用外部函数成功,并调用该组件（btn_twos）本身的data数据");
+				}
+
+				var othercompon = function(args){
+
+				    alert(args+"___调用同模板，不同组件化（btn_ones）的data数据");
+				}
+
+				var othermoudel = function(args){
+
+				    //console.log(inp_test);   //旧值
+				    //console.log(Inps.data.inp_contet);//新值
+
+				    alert(args+"___调用不同模板，不同组件化（Inps）的data数据");
+				}
+
+				Inps.$inject('#test','before');
+
+				btn_ones.$inject('#test','top');
+
+				btn_twos.$inject("#test");
+
+				</script>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/跨组件之间data数据调用—通讯方式.html">跨组件之间data数据调用—通讯方式</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page21.3">5.2、regular-ui下的表单验证</a></h3>
+				<p class="sty_p">此前台表单验证的实现需要引入regular-ui.min.js、regular-ui.default.min.css两个文件</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes"> 
+                        <!-- <link rel="stylesheet" type="text/css" href="regular-ui.default.min.css"> -->
+	
+	    <!-- <div class="valitions"></div> -->
+
+	</body>
+
+	<!-- <script src="regular.min.js"></script>
+
+	<script src="regular-ui.min.js"></script> -->
+
+	<script type="text/regular" id="reform">
+
+	    <form class="m-form">
+
+	    <validation ref="validation">
+
+	        <div class="u-formitem">
+
+	            <label class="formitem_tt">用户名<span class="formitem_rqr">*</span>：</label>
+
+	            <span class="formitem_ct">
+
+	                <input2 rules={nameRules} value={username} placeholder={usena} maxlength=12 tip="4~12个字符，包括字母、数字、下划线" />
+
+	            </span>
+	        </div>
+	        <div class="u-formitem">
+
+	            <label class="formitem_tt">邮箱<span class="formitem_rqr">*</span>：</label>
+
+	            <span class="formitem_ct">
+
+	                <input2 rules={emailRules} value={emails}  tip="请输入标准的邮箱" />
+
+	            </span>
+	        </div>
+	        <div class="u-formitem">
+
+	            <label class="formitem_tt">手机号<span class="formitem_rqr">*</span>：</label>
+
+	            <span class="formitem_ct">
+
+	                <input2 rules={iphoneRules} value={phones}  tip="请输入标准的手机号" />
+
+	            </span>
+	        </div>
+	        <div class="u-formitem">
+
+			 <label class="formitem_tt">设置密码<span class="formitem_rqr">*</span>：</label>
+
+		            <span class="formitem_ct">
+
+		                <input2 type="password" rules={passwordRules} value={password} maxlength=18 tip="6~18个字符，包括字母、数字、下划线" />
+		            </span>
+
+		    </div>
+	        <div class="u-formitem">
+
+	            <label class="formitem_tt">确认密码<span class="formitem_rqr">*</span>：</label>
+
+	            <span class="formitem_ct"><input2 type="password" rules={confirmRules} maxlength=18 value={re_pasword} tip="请确认密码"/></span>
+	        </div>
+	        <div class="u-formitem">
+
+	            <span class="formitem_ct"><a class="u-btn u-btn-primary" on-click={this.submit()}>立即注册</a></span>
+	        </div>
+	    </validation>
+	    </form>
+</script>
+<script>
+
+var component = new RGUI.Component({
+
+    template: '#reform',
+
+    data: {
+
+        nameRules: [
+
+            {type: 'isFilled', on:'blur',message: '请输入用户名！'},
+
+            {type: 'isLength', on:'keyup+blur',min: 4, max: 12, message: '请输入4~12个字符！'}
+        ],
+        emailRules:[
+        	{type:'isFilled',on:'blur',message:'请输入邮箱！'},
+
+        	{on:'keyup+blur',message:'请输入正确格式的邮箱！',method:function(value){
+
+        		//自定义验证一个邮箱的正则(返回一个布尔值)
+
+        		return value.match(/^[\w\.\-]+@[\w\-]+\.\w+$/);
+        	}}
+        ],
+ iphoneRules:[
+        	{type:'isFilled',on:'blur',message:'请输入手机号码！'},
+
+        	{on:'keyup+blur',message:'请输入正确格式的手机号码！',method:function(value){
+
+        		//自定义验证一个手机号的正则(返回一个布尔值)
+
+        		return value.match(/^1(([3458][0-9])|(7[678]))[0-9]{8}$/);
+        	}}
+        ],
+        passwordRules: [
+
+            {type: 'isFilled',on:'blur', message: '请设置密码！'},
+
+            {type: 'isLength',on:'keyup+blur', min: 6, max: 18, message: '请输入6~18个字符！'}
+        ],
+        confirmRules: [
+            {type: 'isFilled',on:'blur', message: '请确认密码！'},
+
+            {message: '两次密码不一致！',on:'keyup+blur', method: function(value) {
+
+                return value === component.data.password;
+            }}
+        ],
+
+        usena:'用户名哦！',
+    },
+    submit: function() {
+
+        var conclusion = this.$refs.validation.validate();
+
+      	//表单验证成功时执行
+
+        if(conclusion.success){
+
+        	//input2标签中username、password、re_pasword分别表示在页面中用户名、密码等的输入值(value值)。
+
+        	console.log(component.data.username);
+
+      		console.log(component.data.password);
+
+      		console.log(component.data.re_pasword);
+        }else{
+        	return
+	        }
+	    },
+
+	});
+	component.$inject('.valitions');
+	</script>  
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/regular-ui下的表单验证.html">regular-ui下的表单验证</a>
+			</div>
+			<hr/>
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page21.4">5.3、regular完整小页面实例（不含交互）</a></h3>
+				<p class="sty_p">regular完整小页面实例--主要是结合regular各个知识点，完成的一个完整的regular编写的页面</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes"> 
+					<title>rgl_完整页面小实例</title>
+
+					<link href="css/d_apio_t.css" rel="stylesheet" type="text/css" />
+
+					<style type="text/css">
+
+					    .changereds{color: #f00;}
+
+					</style>
+					</head>
+
+					<body style="background:#eee">
+
+					    <div class="tapi_main" style="margin-top:50px;">
+
+					        <div class="main_wrap" >
+
+					            <div class="sys_api">
+
+					            <!-- 这里引入input(url)组件 -->
+
+					                <form id="form_dem" method="post">
+
+					                    <ul class="dem_ul"><!-- 这里引入li组件 --></ul>
+
+					                    <div class="dem_btns"><!-- 这里引入按钮组件 --></div>  
+
+					                </form>
+					                	<div class="dem_result"><!-- 这里引入返回结果组件 --></div>
+
+					            </div>
+					        </div>
+					        <!-- 这里引入结尾版权所有组件 -->
+
+					        <!-- 具体结构内容逻辑实现查看下面链接中的例子 -->
+					    </div>
+					    
+					</body>
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/完整页面小实例.html">完整页面小实例</a>
+			</div>
+			<hr/>
+<!--
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page21.2">4.1、不同组件中data数据的调用，绑定函数及其调用方式</a></h3>
+				<p class="sty_p">不同组件中data数据的调用，绑定函数及其调用方式</p>
+			</div>
+			<h4 class="forex">Example :</h4>
+			<div class="exp">
+				<pre>
+                    <code class="codes"> 
+                        
+                    </code>
+                </pre>
+			</div>
+			<div class="example">实例演示：
+				<a href="d_example/2extend(复用的体现)页面登陆登出功能.html">1、extend(复用的体现)页面登陆登出功能</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="d_example/10if_else未登陆情况.html">2、if_else未登陆情况</a>
+			</div>
+			<hr/>
+-->
+			<div class="wrap_des">
+				<h3 class="mar-btm"><a name="page22">END</a></h3>
+				<p class="sty_p">本文是对rejular的粗浅了解,本文主要例子是-实例演示-中的代码（链进去的页面没什么好看的！），代码页都有相应详细注释！
+				</p>
+			</div>
+			<div class="example" style="font-size: 18px;margin-top: 30px;">本文参考：
+				<a href="http://regularjs.github.io/guide/zh/index.html">regularjs指南</a>
+			</div>
+		</div>
+	</div>
+	<div class="d_list">
+		<ul class="list_scrol">
+			<li class="d_list_tit"><a href="#page1">1、静态接口</a></li>
+			<li><a href="#page2">1.1、Regular.extend</a></li>
+			<li><a href="#page3">1.2、new Component(options)</a></li>
+			<li><a href="#page3.1">1.3、Component.component</a></li>
+			<li><a href="#page4">1.4、Component.filter</a></li>
+			<li><a href="#page5">1.5、Component.event（DOM事件）</a></li>
+			<li><a href="#page6">1.6、Component.event（自定义事件）</a></li>
+			<li class="d_list_tit"><a href="#page7">2、实例接口</a></li>
+			<li><a href="#page8">2.1、component.$inject</a></li>
+			<li><a href="#page9">2.2、component.$update\$refs</a></li>
+			<li><a href="#page10">2.3、component.$get</a></li>
+			<li><a href="#page10.1">2.4、component.$watch</a></li>
+			<li><a href="#page10.2">2.5、component.$mute</a></li>
+			<li><a href="#page10.3">2.6、component.$on\$off\$emit</a></li>
+			<li class="d_list_tit"><a href="#page11">3、指令</a></li>
+			<li><a href="#page12">3.1、r-model</a></li>
+			<li><a href="#page13">3.2、r-style</a></li>
+			<li><a href="#page14">3.3、r-class与r-hide</a></li>
+			<li><a href="#page15">3.4、r-class与规则if的综合应用</a></li>
+			<li><a href="#page16">3.5、r-html</a></li>
+			<li><a href="#page17">3.6、r-animation</a></li>
+			<li class="d_list_tit"><a href="#page18">4、规则Rule</a></li>
+			<li><a href="#page19">4.1、list</a></li>
+			<li><a href="#page20">4.2、if_else</a></li>
+			<li><a href="#page21">4.3、if_else几个实例应用</a></li>
+			<li class="d_list_tit"><a href="#page21.1">5、rgl重点、难点解析</a></li>
+			<li><a href="#page21.2">5.1、不同组件中data数据的调用，绑定函数及其调用方式</a></li>
+			<li><a href="#page21.3">5.2、regular-ui下的表单验证</a></li>
+			<li><a href="#page21.4">5.3、regular完整小页面实例（不含交互）</a></li>
+			<li class="d_list_tit"><a href="#page22">6、END</a></li>
+		</ul>
+		<div class="d_line"></div>
+		<div class="d_title_rgl"><span class="d_name">regular.js</span><i class="d_aut">----dxj</i></div>
+	</div>
+</body>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script>
+	function changehtml(str){
+		var reg1 = /</g;
+		str = str.replace(reg1,'&lt;');
+		return str;
+	}
+	$.each($('.codes'),function(i,v){
+		var s1 = $('.codes').eq(i).html();
+		$('.codes').eq(i).html(changehtml(s1));
+	});
+</script>
+</html>

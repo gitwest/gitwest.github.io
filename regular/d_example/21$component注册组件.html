@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+<div id="compons"></div>
+<script src="regular.min.js"></script>
+<script>
+	//内嵌组件  我们可以在模板中利用<pager/> 来初始化的秘诀是name属性,name是一个全局配置。
+
+	var Pager = Regular.extend({
+
+	  name: 'pager',
+
+	  template:'<pager current=1 on-nav={someCallback($event)} />'
+
+	});
+	var Pa = new Pager({});
+
+	//如果你需要在某个组件下用自定义的名字，可以使用Component.component接口。
+
+	Component.component('custm-page',Pager);
+
+	Pa.$inject('#compons');
+</script>
+</body>
+</html>

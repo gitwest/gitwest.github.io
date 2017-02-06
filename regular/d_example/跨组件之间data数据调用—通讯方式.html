@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>跨组件之间data数据调用、通讯方式</title>
+<link href="css/d_apio_t.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    .test_btn{margin:100px;}
+    .test_btn button{margin-right: 40px;padding: 10px;}
+    .inp_mar{margin:50px 100px; }
+</style>
+</head>
+<body style="background:#eee">
+    <div id="test"></div>
+    <btn></btn>
+</body>
+</html>
+<script type="text/regular" id="inpt">
+    <form r-class={{'inp_mar':bol}}>
+        <input placeholder="请输入"  type="text" r-model='inp_contet'/><span>{inp_contet}</span>
+    </form>
+</script>
+
+<script type="text/regular" id="btns">
+    <div class="test_btn">
+        <button on-click={this.inphtml(btn_one)} ref="bt" >{btn_one}</button>  <!-- 能将同组件的data调用方法弹出来 -->
+    </div>
+</script>
+
+<script src="regular.min.js"></script>
+<script>
+var inp = Regular.extend({
+    template:"#inpt"
+});
+var btn = Regular.extend({
+    name:'btn',
+    template:'#btns',
+});
+
+var Inps = new inp({
+    data:{
+        inp_contet:'inpt模板',
+        bol:true
+    }
+});
+
+var btn_ones = new btn({ 
+    data:{
+        btn_one:'弹出同组件,同模板中的内容', 
+        btOne_content:'我是组件btn_ones的data数据',
+    },
+
+    inphtml:function(arg){
+        alert(arg);
+    }
+});
+
+var btn_twos = new btn({ 
+    data:{
+        btn_one :'btn_twos组件的按钮',
+
+    },
+
+    inphtml:function(arg){
+        //alert(arg);
+        //在点击btn_twos组件按钮时通过on绑定可以调用外部函数changefn。
+        btn_twos.$on('alerts',changefn);
+        //调用组件自身的data数据（btn_one）
+        btn_twos.$emit('alerts',arg);
+        //函数每执行一次进行解绑一次，不然会出现累加性的多次调用情况
+        btn_twos.$off('alerts');
+
+        btn_twos.$on('alertOther',othercompon);
+        //调用同模板不同组件化（btn_ones）的data数据（btOne_content）
+        btn_twos.$emit('alertOther',btone_test);
+        //函数每执行一次进行解绑一次，不然会出现累加性的多次调用情况
+        btn_twos.$off('alertOther');
+
+        //在绑定、调用含有（r-model）的文本框之类的input前，一定要变量（inp_test）从新获取一下值，
+        //不然作为参数（inp_test）不是最新值！！
+        inp_test = Inps.data.inp_contet;
+        //调用不同模板，不同组件化（Inps）的data数据
+        btn_twos.$on('alertmoudel',othermoudel);
+        btn_twos.$emit('alertmoudel',inp_test);
+        //函数每执行一次进行解绑一次，不然会出现累加性的多次调用情况
+        btn_twos.$off('alertmoudel');
+    }
+}); 
+
+//在全局定义一下各组件的data数据，才能在组件中被调用！
+var inp_test = Inps.data.inp_contet;
+var btone_test = btn_ones.data.btOne_content;
+
+//console.log(btone_test);
+var changefn = function(args){
+    alert(args+"___引用外部函数成功,并调用该组件（btn_twos）本身的data数据");
+}
+
+var othercompon = function(args){
+    alert(args+"___调用同模板，不同组件化（btn_ones）的data数据");
+}
+
+var othermoudel = function(args){
+    //console.log(inp_test);   //旧值
+    //console.log(Inps.data.inp_contet);//新值
+    alert(args+"___调用不同模板，不同组件化（Inps）的data数据");
+}
+
+Inps.$inject('#test','before');
+btn_ones.$inject('#test','top');
+btn_twos.$inject("#test");
+</script>
+
+　　　
+

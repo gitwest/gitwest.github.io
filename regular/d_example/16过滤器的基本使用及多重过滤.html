@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+.animated{ width:200px;height:200px;border:1px solid #f00;}
+</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		/*
+		
+		//过滤器的基本使用
+
+		//返回一个数组拼接成的字符串，此函数中的参数为模板中 需要过滤的内容(这里是[1,2,3]）
+
+		var add = function(arr){
+			return arr.join("+");
+		};
+
+		//Regular.filter("过滤器名称"，过滤器过滤的方法函数的名称)，当然此函数还可以直接写为匿名函数
+
+		Regular.filter("joins",add);
+
+		//过滤模板加载，注意读取数据的顺序
+		var Compon = Regular.extend({
+		  template:'<p>{ [1,2,3] | joins } = 6</p>',
+		});
+
+		var compon = new Compon({});
+
+		compon.$inject('#app');
+
+		*/
+
+	///////////////////////////////////////////////////////////		
+		//过滤器，多重过滤，匿名函数方法实现
+
+		Regular.filter('last',function(obj){
+			return obj[obj.length-1];
+		});
+
+		Regular.filter('lowercase',function(obj){
+			return obj.toLowerCase();
+		});
+
+		//过滤模板加载
+		var Compon = Regular.extend({
+		  template:'<p>{ list | last | lowercase }</p>',
+		});
+
+		//需要过滤的数据
+		var compon = new Compon({
+			data:{
+				list:['ADD','UPDATE','DELETE']
+			}
+		});
+
+		compon.$inject('#app');
+
+
+
+	</script>
+</body>
+</html>

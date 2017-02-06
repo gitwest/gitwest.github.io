@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>rgl_完整页面小实例</title>
+<link href="css/d_apio_t.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    .changereds{color: #f00;}
+</style>
+</head>
+<body style="background:#eee">
+    <div class="tapi_main" style="margin-top:50px;">
+        <div class="main_wrap" >
+            <div class="sys_api">
+            <!-- 这里引入input(url)组件 -->
+                <form id="form_dem" method="post">
+                    <ul class="dem_ul"><!-- 这里引入li组件 --></ul>
+                    <div class="dem_btns"><!-- 这里引入按钮组件 --></div>  
+                </form>
+                <div class="dem_result"><!-- 这里引入返回结果组件 --></div>
+            </div>
+        </div>
+        <!-- 这里引入结尾版权所有组件 -->
+    </div>
+</body>
+
+<!-- input(url)组件模板 -->
+<script type="text/regular" id="d_demourl">
+    <input type="text" class="inp_url" placeholder="请输入相应的URL" ref="urls" r-model="url_Txt" on-blur={this.stores()} on-input={this.regxp()} />
+    <div class="dem_vail" r-class={{"changereds":changered=='yes'}}>{hid_html}</div>
+</script>
+
+<!-- li组件模板 -->
+<script type="text/regular" id="demlis">
+    {#list items as item}
+    <li class="dem_li"><span class="dem_txt">参数名：</span><input type="text" r-model='item.canName' class="inp_txt"/><span class="dem_num">参数值：</span><input type="text" r-model='item.canval' class="inp_num" /><span class="dem_del" on-click={items.splice(item_index,1)} r-hide={item.del=='Y'}>删除</span></li>
+    {/list}
+</script>
+
+<!-- 返回结果组件模板 -->
+<script type="text/regular" id="demoresult">
+    <p class="res_txt">返回结果：<span class="res_mess" style="color:#f00;">{d_result}</span></p>
+    <div class="res_val"><pre class="res_vals">{d_content}</pre></div>
+</script>
+
+<script src="d_example/regular.min.js"></script>
+<script>
+//////////////////////////////////////////////////////////
+    // 接口input(url)输入框组件化
+    var urltext = Regular.extend({
+        template:'#d_demourl'
+    });
+    var url_Text = new urltext({
+        data:{
+            url_Txt:'',
+            changered:'no',
+            ifvali:false,
+            hid_html:'请输入正确格式的url,例如：http://pingji.com'
+        },
+        regxp:function(){
+            url_Text.$on('yanZh',yanzheng);
+            url_Text.$emit('yanZh');
+            url_Text.$off('yanZh');
+        },
+        //url进行存储
+        stores:function(){
+            if(url_Text.data.ifvali){
+                window.localStorage.setItem('store',url_Text.data.url_Txt);
+            }
+        }
+    });
+
+    //将验证通过的url进行读取，再次刷新页面时，保持url的记忆功能！
+    url_Text.$update({
+        'url_Txt' : window.localStorage.getItem('store')
+    });
+    //前台url验证 
+    var yanzheng = function(){  
+        var btn_reg = /^[a-zA-Z]{3,10}:\/\/[^\s]+$/;
+        if(url_Text.data.url_Txt.match(btn_reg) == null){
+            url_Text.data.hid_html = '输入url不正确';
+            url_Text.data.changered = 'yes';
+            url_Text.data.ifvali = false
+        }else{
+            url_Text.data.hid_html = '' ;
+            url_Text.data.changered = 'no';
+            url_Text.data.ifvali = true;
+            return true;
+        }
+    }
+    url_Text.$inject('.sys_api','top');
+//////////////////////////////////////////////////////
+
+    //点击能够添加、删除的li 组件化
+    var d_demlis = Regular.extend({ 
+        template:'#demlis'
+    });
+    var Ddemlis = new d_demlis({ 
+        data:{
+            items:[{canName:'初始名称',canval:'初始值',del:'Y'}]
+        }
+    });
+    Ddemlis.$inject('.dem_ul');
+
+///////////////////////////////////////////////////
+
+    // 按钮组件化模板
+    var d_bts = Regular.extend({ 
+        template:'<div{#if btntem.clasnames=="btn_subm"} class="btn_subm" {#elseif btntem.clasnames=="btn_add"}   class="btn_add" {#else} class="btn_reset"{/if} on-click={this.allFun(arg1,arg2)}>{btntem.name}</div>'
+    });
+
+
+    //第一个按钮 提交数据 功能  组件化
+    var Dbts1 = new d_bts({ 
+        data:{
+            btntem:{name:'提交数据',clasnames:'btn_subm'}   
+        },
+        allFun:function(){ 
+        	alert('交互功能暂未添加')
+        }
+    });
+    
+    ///第二个按钮添加数据 功能 组件化
+    var Dbts2 = new d_bts({ 
+        data:{
+            btntem:{name:'+添加数据',clasnames:'btn_add'}
+        },
+        allFun:function(){ 
+            //不同组件之间接口调用！ 
+           Ddemlis.data.items.push({canName:'初始名称',canval:'初始值',del:'N'});
+           //当存在两行及两行以上时都显示 删除 选项
+           Ddemlis.data.items[0].del='N';
+           //必须实时更新数据
+           Ddemlis.$update();   
+        }
+    });
+
+    ///第三个按钮清空数据 功能 组件化
+    var Dbts3 = new d_bts({ 
+        data:{
+            btntem:{name:'清空数据',clasnames:'btn_reset'}   
+        },
+        allFun:function(){ 
+            var items = Ddemlis.data.items;
+            for(item in items){
+                items[item].canName = '';
+                items[item].canval = '';
+            }
+            Ddemlis.$update();
+        }
+    });
+
+    Dbts1.$inject('.dem_btns');
+    Dbts2.$inject('.dem_btns');
+    Dbts3.$inject('.dem_btns');
+/////////////////////////////////////////////////////////////
+
+    //返回结果 组件化
+    var d_relults = Regular.extend({ 
+        template:'#demoresult'
+    });
+    var Drelults = new d_relults({ 
+        data:{
+           d_result:'这里是返回结果',
+           d_content:'这里是返回内容'
+        }
+    });
+    Drelults.$inject('.dem_result');
+//////////////////////////////////////////////////////////
+
+    //尾部结尾版权所有 组件化
+    var d_foot = Regular.extend({ 
+        template:'<p class="tapi_footer">{footroot}</p>'
+    });
+    var Dfoot = new d_foot({ 
+        data:{
+           footroot:'版权所有:北京职信鼎程信息技术有限公司'
+        }
+    });
+    Dfoot.$inject('.tapi_main');
+///////////////////////////////////////////////////////
+</script>
+</html>

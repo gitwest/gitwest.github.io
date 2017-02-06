@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+	.btn{position: absolute;top:50px;}
+</style>
+</head>
+<body>
+	<div id="appq"></div>
+	<script type="text/regular" id="hello" name="hello">
+
+	<button class='btn' on-click={left=left+10} r-style={{left:left+'px',top:top+'px'}}>left+10</button>left:{left}
+	
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+
+		//按钮加上了 left属性（这里随着left的增加，有一个向右运动的效果）
+		// var app = new Regular({
+		// 	template:
+		// 	"<button class='btn'\
+		// 		on-click={left=left+10} r-style={{left:left+'px'}}>\
+		// 		left+10\
+		// 		</button>\
+		// 		left:{left}",
+		// 		data:{left:1}
+				//添加到了document中
+		// }).$inject(document.body)
+
+
+		//上面组件还可以写成以下形式,这里模块添到了#app的结构中
+		var componApp = Regular.extend({
+			template:'#hello'
+		})
+
+		var ComponApp = new componApp({
+			data:{
+				left:1,
+				//这里注意r-style比style具有优先权
+				top:300
+			}
+		})
+
+		ComponApp.$inject('#appq');
+
+	</script>
+</body>
+</html>

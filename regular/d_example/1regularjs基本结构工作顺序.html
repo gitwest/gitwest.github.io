@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<script src="jquery-1.12.4.min.js"></script>
+<script src="regular.min.js"></script>
+</head>
+<body>
+	<div>11</div>
+	<div id="app">
+		<p>22</p>
+	</div>
+	<div>44</div>
+	<script type="text/regular" id="hello" name="hello">
+		Hello, Guest～～～～hello,{username}
+	</script>
+
+	<script src="regular.min.js"></script>
+	<script>
+
+		//声明一个组件类，并通template将加载一个模板容器
+		var HelloRegular = Regular.extend({
+			template:'#hello',
+		});
+
+		//组件component需要一个初始化data数据
+		var component = new HelloRegular({
+			data:{username:"leeluolee"}
+		});
+
+		//将component组件插入到指定位置
+		component.$inject('#app');
+	</script>
+</body>
+</html>

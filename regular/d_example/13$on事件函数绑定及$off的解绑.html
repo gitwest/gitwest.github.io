@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="app"></div>
+
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		//$on绑定函数的解析
+
+		// var Component = Regular.extend({
+		// 	//在模板里面 直接写入要点击执行的函数名称
+		// 	template:'<h3>{count}</h3><hr/><button on-click="add"> count+1 </button> <button on-click="minus"> count-1 </button>',
+
+		// 	init:function(){  //init 为初始化函数 ，名字不能变；
+		// 		//事件绑定（累加）
+		// 		this.$on('add',function($event){
+		// 			this.data.count += 1;
+		// 		});
+
+		// 		//事件绑定（累减）
+		// 		this.$on('minus',function($event){
+		// 			this.data.count -= 1;
+		// 		})
+		// 	}
+		// });
+
+		// var compon = new Component({
+		// 	data:{
+		// 		count:50
+		// 	}
+		// });
+
+		// compon.$inject("#app");
+
+
+////////////////////////////////////////////////////////////
+
+		//$on绑定函数的另类写法，及$off的解绑移除
+		var Component = Regular.extend({
+			//在模板里面 直接写入要点击执行的函数名称
+			template:'<h3>{count}</h3><hr/><button on-click="add"> count+1 </button> <button on-click="minus"> count-1 </button>',	
+		});
+
+		var compon = new Component({
+			data:{
+				count:50
+			}
+		});
+
+		var minuss = function($event){
+			this.data.count -= 1;
+		};
+
+		var adds = function($event){
+			this.data.count += 1;
+		};
+
+		//事件绑定（累加） compon.$on('事件名称',回调函数名)
+		compon.$on('add',adds);//回调函数可以写在外边，这里只写函数名称就行
+
+		//事件绑定（累减）
+		compon.$on('minus',minuss);//回调函数可以写在外边，这里只写函数名称就行
+
+		//移除指定事件下的fn函数
+		//compon.$off('minus',minuss);//这里取消注释后会 累减事件将不会被触发
+        
+
+        //移除compon下的事件/函数
+       	//compon.$off();  这里取消注释后会 所有事件将不会被触发
+
+		compon.$inject("#app");
+
+	</script>
+</body>
+</html>

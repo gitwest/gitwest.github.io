@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="app"></div>
+
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		var component = new Regular({
+			template:"<h2 ref='h3' on-click={title=title.toLowerCase()}>{title}</h2><p>{user.name}</p>",
+			data:{
+				title:'REGULARJS',
+				user:{
+					name:'ml',
+					age:22
+				}
+			}
+		})
+		
+		//使用 component.$refs.h3 主要获取h2节点 
+
+		console.log(component.$refs.h3.innerHTML);//REGULARJS;  读取携带ref=h3的节点的内容
+
+		component.data.title = 'LIIEE'
+
+		console.log(component.$refs.h3.innerHTML);//REGULARJS
+
+		component.$refs.h3.click();//携带ref=h3的节点执行一下
+		console.log(component.$refs.h3.innerHTML);//liiee
+
+
+		//用于同步数据  将data直接同步到view上，相当于
+		component.$update({
+  			"user.name": "leeluolee",
+ 			"user.age": 20
+		});
+		component.$update()  //注意$update数据定义好以后，此句代码的执行才能实现data同步到view上
+
+
+
+		//相当于这两句代码，但是这两句代并没不能及时的（直接的反应到视图上），需要某种执行（例如 点击）以后才能实现  数据到视图的转换
+		//component.data.user.name='leeluolee';
+		//component.data.user.age=20
+
+		console.log(component.data.user.age) 
+		component.$inject('#app');
+
+	</script>
+</body>
+</html>

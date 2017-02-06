@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="capp"></div>
+	<script type="text/regular" id="hell" name="hello">
+
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+
+		//规则Rule：if/else/elseif 用于对逻辑的控制/判断
+
+		// if/else/elseif 简单逻辑控制使用
+		/*
+		var Compon = Regular.extend({
+
+			template:"{#if num<10}\
+
+						<p>num为小于10的数字</p>\
+
+					  {#elseif num>60}\
+
+					  	<p>num为大于60的数字</p>\
+
+					  {#else}\
+
+					  	<p>num为不满足以上条件的东东---</p>\
+
+					  {/if}"       
+		});
+
+		var compon = new Compon({
+
+			data:{
+
+				num:6
+			}
+		});
+
+		compon.$inject('#kapp');
+
+		*/
+
+//------------------------------------------------
+
+		//if/else/elseif 对属性的逻辑控制
+		var Attr = Regular.extend({
+			template:"<input  {#if !disabled}   {#else} disabled r-model='hi' {/if} /> {hi}<br/>\
+				      <button on-click={ disabled = !disabled}>{disabled ? 'active' : 'disable'} it</button>"
+		});
+
+		var attr = new Attr({
+			data:{
+				hi: 'hello world !'
+			}
+		}); 
+
+		attr.$inject('#capp');
+	</script>
+</body>
+</html>

@@ -7,9 +7,9 @@ window.onload=function(){
 	
 	var proL=0;
 	var proT=0;
-	setSide();
+	//setSide();
 	window.onresize=function(){
-		setSide();
+		//setSide();
 		
 		//当窗口缩放大小时 判定滚动屏按钮的隐藏和显示效果 
 		//以1200作为是否显示滚动屏按钮的依据
@@ -45,7 +45,7 @@ window.onload=function(){
 		var scrollW=document.documentElement.clientWidth;
 		var scrollH=document.documentElement.clientHeight;
 		//最外层宽、高设置
-		obj1.style.minHeight=obj2.offsetHeight+'px';
+		//obj1.style.minHeight=obj2.offsetHeight+'px';
 		//obj1.style.width=scrollW+'px';	
 		//obj1.style.height=scrollH+'px';	
 		//主要内容区（wrap_one）宽度自适应设置
@@ -61,7 +61,7 @@ window.onload=function(){
 	
 	for(var i=0;i<scrollPlate.length;i++){
 		
-		scrollPlate[i].style.height=window.innerHeight+'px';
+		//scrollPlate[i].style.height=window.innerHeight+'px';
 		scrollLis[i].index=i;
 		scrollLis[i].onclick=function(){
 			var _this=this;

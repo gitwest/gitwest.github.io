@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+<div id="mutes">title添加到这里:</div>
+<script src="regular.min.js"></script>
+<script>
+	var component = new Regular({
+	  template: '<h2>{title}</h2>',
+	  data: {
+	    title: "hello"
+	  }
+	})
+	// disable it（让组件失效）
+	component.$mute(true) ;
+
+	//组件失效后再怎么从新定义data都没有用
+	component.data.title = 'title changed';
+
+	component.$update();  //更新（下载）一次数据,页面仍显示hello
+
+	//激活组件，并且自动（更新数据）同步ui，这时页面显示title changed
+	component.$mute(false) ;
+
+	component.$inject('#mutes'); 
+
+</script>
+</body>
+</html>

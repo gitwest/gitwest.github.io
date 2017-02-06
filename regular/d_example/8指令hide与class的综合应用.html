@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+.active{ width:200px;height:200px;background:#ccc;}
+.autoClass{width:300px;height:200px;background: #f00;}
+.autoborder{border:5px solid blue;}
+</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+
+	<div r-class={{"active":page=='block'}}  r-hide={ page !=='block' }>{page}</div><button on-click={page="none"}>onClick_Hide</button><div r-class={{"autoClass":bool,"autoborder":bool}}></div><!-- rgl多个class的添加方式 -->
+
+	</script>                    
+	<script src="regular.min.js"></script>
+	<script>
+	//  指令r-hide与r-class的综合应用，再此例中注意r-hid/r-class的写法！
+	var Compon = Regular.extend({
+		template:'#hello',
+	});
+
+	var compon = new Compon({
+		data:{
+			page:'block',
+			bool:true      //模板内也可以直接是布尔值的表达式，用于无需判断直接添加class。
+		}
+	});
+
+	compon.$inject('#app');
+		
+	</script>
+</body>
+</html>

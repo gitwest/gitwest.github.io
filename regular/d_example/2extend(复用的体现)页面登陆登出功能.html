@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+	<!-- username不为空时，进入携带退出功能的页面，点击logout时，清空username的值；username为空时，进入携带进入功能的页面，点击登陆在extend时添加原型方法(login)从新定义username的值-->
+	
+		{#if username}
+			Hello,{username} <a href="javascript:;" on-click={username=" "}> logout </a>
+		{#else}
+			Sorry,Guest.Please <a href="javascript:;" on-click={this.login()}> login </a>
+		{/if}
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+	
+		//这种写法有利于共用方法（login）的复用
+		var HelloRegular = Regular.extend({
+			template:"#hello",
+			login:function(){
+				var data = this.data;
+				data.username = prompt("请输入用户名","")
+			}
+		});
+
+		var component = new HelloRegular({
+			data:{
+				username:"leo"
+			}
+		});
+		var com = new HelloRegular({
+			data:{
+				username:""
+			}
+		});
+
+		component.$inject("#app");
+		//com.$inject("#app","after");
+	</script>
+</body>
+</html>

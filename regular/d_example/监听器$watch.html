@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="watchs"</div>
+	<script type="text/regular" id="watches" name="hello">
+		<input r-model="username" /><span>老数据：{olderuser}&nbsp;||</span><i>&nbsp;新数据：{username}</i>
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		var compon = Regular.extend({
+			template:'#watches'
+		});
+
+		var com = new compon({
+			data:{
+				username:'dxj',
+				olderuser:'dj'
+			}
+		});
+        
+		com.$watch('username',function(newvalue,oldvalue){
+			//console.log(newvalue);
+			//console.log(oldvalue);
+
+			//注意组件内部调用数据的方式   this.data.olderuser
+			this.data.olderuser = oldvalue;
+		});
+
+		com.$inject('#watchs');
+	</script>
+</body>
+</html>

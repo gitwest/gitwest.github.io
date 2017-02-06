@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+
+	 <!-- 在初始化数据中（data）如果username的值不为空，（html结构中）显示hello，{username}，否则（html结构中）显示  sorry,Guest -->
+
+		{#if username}
+			hello,{username}
+		{#else}
+			sorry,Guest
+		{/if}
+
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		var HelloRegular = Regular.extend({
+			template:'#hello'
+		});
+
+		var component = new HelloRegular({
+			data:{
+				username:'leo'
+				//username:null
+			}
+		});
+		component.$inject('#app')
+		
+	</script>
+</body>
+</html>

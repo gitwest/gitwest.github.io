@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="sapp"></div>
+	<script type="text/regular" id="hell" name="hello">
+		<p class="txtp" r-html={txt}>给我加点内容</p>
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		var com = Regular.extend({
+			template:'#hell'
+		});
+		var comsum1 = new com({
+			data:{
+				txt:'这是要通过r-html添加的内容！！'
+			}
+		});
+
+		var comsum2 = new com({
+			data:{
+				txt:'这是要通过r-html添加的内容！！,在#sapp节点下边'
+			}
+		});
+		comsum1.$inject('#sapp');
+		comsum2.$inject('#sapp','after');
+	</script>
+</body>
+</html>

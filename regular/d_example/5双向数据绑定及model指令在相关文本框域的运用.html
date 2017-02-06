@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+
+		<!-- r-model指令在文本框/域的运用 -->
+		
+		<textarea r-model='textarea'>{user}</textarea>
+		<input r-model='user' />{user}
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+
+		var Compon = Regular.extend({
+			template:'#hello',
+		});
+
+		var compon = new Compon({
+			data:{
+				user:'lee',
+			}
+		});
+		
+
+		//这里实现双向数据绑定
+		// Regular.directive('r-model',function(ele,val){
+		// 	this.$watch(val,function(newVal){
+		// 		ele.innerHTML=newVal
+		// 	})
+		// });
+
+		compon.$inject("#app");
+	</script>
+</body>
+</html>

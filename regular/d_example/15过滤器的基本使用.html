@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+.animated{ width:200px;height:200px;border:1px solid #f00;}
+</style>
+<script src="jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+
+		//返回一个数组拼接成的字符串，此函数中的参数为模板中 需要过滤的内容
+		var add = function(arr){
+			return arr.join("+");
+		};
+
+		//Regular.filter("过滤器名称"，过滤器过滤的方法函数的名称)，当然此函数还可以写为匿名函数
+
+		Regular.filter("joins",add);
+
+		//过滤模板加载，注意读取数据的顺序
+		var Compon = Regular.extend({
+		  template:'<p>{ [1,2,3] | joins } = 6</p>',
+		});
+
+		var compon = new Compon({});
+
+		compon.$inject('#app');
+	</script>
+</body>
+</html>

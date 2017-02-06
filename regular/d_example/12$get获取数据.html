@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="app"></div>
+
+	<script type="text/regular" id="hello" name="hello">
+	</script>
+	<script src="regular.min.js"></script>
+	<script>
+		var component = new Regular({
+			template:"<h2 ref='h3' on-click={title=title.toLowerCase()}>{title}</h2><p>{username}</p>",
+			data:{
+				title:'REGULARJS',
+			}
+		})
+		
+		component.$update({ 'username':'luo' })
+		component.$update()
+		component.data.username = 'leo';
+		component.data.job = 'developer';
+
+		//$get 获取最近一次改变的数据（username）
+		component.$get('username');
+		console.log(component.$get('username'))
+
+		component.$inject('#app');
+
+	</script>
+</body>
+</html>
