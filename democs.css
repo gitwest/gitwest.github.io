@@ -135,12 +135,19 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 	background:url(img/b4.jpg) no-repeat;
 }*/
 .body_bg{
-	background: #eee;
+	background: linear-gradient( #df697f 0%,#999 100%);
+	background: -webkit-linear-gradient( #df697f 0%,#999 100%);
+	background: -moz-linear-gradient( #df697f 0%,#999 100%);
+	background: -ms-linear-gradient( #df697f 0%,#999 100%);
 }
 .plate_all{
 	width:1000px;
 	margin: 0 auto;
-	background:rgba(153,153,255,0.8);
+	opacity: 0.9;
+	background:linear-gradient( #e69e87 0%,#43abd7 100%);
+	background:-webkit-linear-gradient( #e69e87 0%,#43abd7 100%);
+	background:-moz-linear-gradient( #e69e87 0%,#43abd7 100%);
+	background:-ms-linear-gradient( #e69e87 0%,#43abd7 100%);
 }
 .wrap_one{
 	width:1000px;
