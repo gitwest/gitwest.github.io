@@ -10,7 +10,6 @@ window.onload=function(){
 	//setSide();
 	window.onresize=function(){
 		//setSide();
-		
 		//当窗口缩放大小时 判定滚动屏按钮的隐藏和显示效果 
 		//以1200作为是否显示滚动屏按钮的依据
 		var scrollOnOff=false;
@@ -58,10 +57,7 @@ window.onload=function(){
 	var scrollLis=scrollUl.getElementsByTagName('li');
 	var scrollNum=0;
 	var	scrollTime=null;
-	
 	for(var i=0;i<scrollPlate.length;i++){
-		
-		//scrollPlate[i].style.height=window.innerHeight+'px';
 		scrollLis[i].index=i;
 		scrollLis[i].onclick=function(){
 			var _this=this;
@@ -73,27 +69,25 @@ window.onload=function(){
 					scrollNum+=150;
 					if(scrollNum>=windH*_this.index){
 						clearInterval(scrollTime);
-						scrollNum=windH*_this.index;
+						scrollNum=scrollPlate[0].offsetHeight*_this.index;
 					}	
 				}else{
 					scrollNum-=150;	
-					if(scrollNum<=windH*_this.index){
+					if(scrollNum<windH*_this.index){
 						clearInterval(scrollTime);
-						scrollNum=windH*_this.index;
+						scrollNum=scrollPlate[0].offsetHeight*_this.index;
 					}	
 				}
 				
 				//浏览器做兼容
-				 document.documentElement.scrollTop=scrollNum;
-				 document.body.scrollTop=scrollNum;
+				document.documentElement.scrollTop=scrollNum;
+				document.body.scrollTop=scrollNum;
 	 
 			},20);
 			romeClas();
 			this.className='addclas';
 		}
 	}	
-	
-	
 	scrollScrol();	
 	
 	//滚动条监控下的li背景变化
@@ -112,11 +106,11 @@ window.onload=function(){
 		if(window.pageYOffset>=0&&window.pageYOffset<windH/2){
 			romeClas();
 			scrollLis[0].className='addclas';
-			//细节问题：window.innerHeight*1.5；这里将1.5乘在后边
-		} else if(window.pageYOffset>=windH/2&&window.pageYOffset<windH*1.5){
+			//细节问题：window.innerHeight*1.3；这里将1.3乘在后边
+		} else if(window.pageYOffset>=windH/2&&window.pageYOffset<windH*1.3){
 			romeClas();
 			scrollLis[1].className='addclas';		
-		} else if(window.pageYOffset>=windH*1.5&&window.pageYOffset<windH*2.5){
+		} else if(window.pageYOffset>=windH*1.3&&window.pageYOffset<windH*2.3){
 			romeClas();
 			scrollLis[2].className='addclas';		
 		}else{

@@ -290,6 +290,12 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 	border-radius:10px 10px 0 0;
 	margin-top:5px;
 }
+#wrap_twoplate{
+	margin-top: -7px;
+}
+#wrap_threeplate{
+	margin-top: 15px;
+}
 #technology span,#education span,#wrap_threeplate span ,#wrap_fourplate  span{
 	width:200px;
 	height:50px;
@@ -685,13 +691,11 @@ body,div,span,input,p,ul,li,img,table,tr,th,td{
 #interest{
 	width:800px;
 	height:130px;
-	margin:20px auto;
+	margin:25px auto;
 	overflow:hidden;
 	position:relative;
 }
-.martop_{
-	margin-top: 20px;
-}
+
 /*inter_list 下li的达到运动效果的关键帧*/
 @keyframes moveInter{
 	
